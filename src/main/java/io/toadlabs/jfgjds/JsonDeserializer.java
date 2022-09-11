@@ -1,12 +1,10 @@
 package io.toadlabs.jfgjds;
 
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
-import java.io.Writer;
 import java.nio.charset.Charset;
 import java.util.Objects;
 
@@ -24,12 +22,6 @@ public class JsonDeserializer {
 			return new Parser();
 		}
 	};
-
-	public static void main(String[] args) throws JsonParseException, IOException {
-		try(Reader in = new InputStreamReader(JsonDeserializer.class.getResourceAsStream("/string_test.json")); Writer out = new FileWriter("minified.json")) {
-			JsonSerializer.write(read(in), out);
-		}
-	}
 
 	public static @NotNull JsonValue read(@NotNull Reader in) throws JsonParseException, IOException {
 		return PARSER.get().setup(Objects.requireNonNull(in)).readSingleValue();
