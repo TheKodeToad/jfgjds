@@ -17,10 +17,12 @@ public class JsonDeserializer {
 
 	// Used to prevent unnecessary allocations.
 	private static final ThreadLocal<Parser> PARSER = new ThreadLocal<Parser>() {
+
 		@Override
 		protected Parser initialValue() {
 			return new Parser();
 		}
+
 	};
 
 	public static @NotNull JsonValue read(@NotNull Reader in) throws JsonParseException, IOException {

@@ -19,7 +19,7 @@ class Parser {
 	int length;
 	char[] buffer;
 
-	public Parser setup(Reader in) throws IOException {
+	Parser setup(Reader in) throws IOException {
 		this.in = in;
 		buffer = null;
 		pos = length = 0;
@@ -96,19 +96,21 @@ class Parser {
 				if(bool != null) {
 					return bool;
 				}
+				break;
 			case 'n':
 				// probably null
 				if(readNull()) {
 					return JsonNull.INSTANCE;
 				}
-			default:
-				if(character() == '-' || character() >= '0' && character() <= '9') {
-					// probably a number
-					return readNumber();
-				}
-
-				throw new JsonParseException("Expected a JSON value");
+				break;
 		}
+
+		if(character() == '-' || character() >= '0' && character() <= '9') {
+			// probably a number
+			return readNumber();
+		}
+
+		throw new JsonParseException("Expected a JSON value");
 	}
 
 	JsonObject readObject() throws IOException {
