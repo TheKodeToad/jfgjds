@@ -105,7 +105,7 @@ class Parser {
 				break;
 		}
 
-		if(character() == '-' || character() >= '0' && character() <= '9') {
+		if(character() == '-' || Character.isDigit(character())) {
 			// probably a number
 			return readNumber();
 		}
@@ -280,13 +280,13 @@ class Parser {
 	}
 
 	JsonNumber readNumber() throws IOException {
-		boolean containsPoint = false;
+		boolean hadPoint = false;
 		StringBuilder number = new StringBuilder();
-		while(character() != -1 && !isWhitespace(character()) && (Character.isDigit(character()) || character() == '-' || character() == '+'
-				|| character() == 'e' || character() == 'E' || character() == 'e' || character() == '.')) {
-			if(!containsPoint) {
-				containsPoint |= character() == '.';
-			}
+		// read until characters don't match palette.
+		while(character() != -1 && !isWhitespace(character())
+				&& (Character.isDigit(character()) || character() == '-' || character() == '+' || character() == 'e'
+						|| character() == 'E' || character() == 'e' || character() == '.')) {
+			hadPoint |= character() == '.';
 			number.append((char) character());
 			read();
 		}
@@ -294,7 +294,7 @@ class Parser {
 		String numberString = number.toString();
 
 		try {
-			if(containsPoint) {
+			if(hadPoint) {
 				double value = Double.parseDouble(numberString);
 				boolean fitsInt = value % 1 == 0;
 				if((float) value == value) {
