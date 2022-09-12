@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import io.toadlabs.jfgjds.data.JsonValue;
 import io.toadlabs.jfgjds.exception.JsonParseException;
 
-public class JsonDeserializer {
+public final class JsonDeserializer {
 
 	// Used to prevent unnecessary allocations.
 	private static final ThreadLocal<Parser> PARSER = new ThreadLocal<Parser>() {
@@ -24,6 +24,10 @@ public class JsonDeserializer {
 		}
 
 	};
+
+	private JsonDeserializer() {
+		throw new UnsupportedOperationException("Object initialization");
+	}
 
 	public static @NotNull JsonValue read(@NotNull Reader in) throws JsonParseException, IOException {
 		return PARSER.get().setup(Objects.requireNonNull(in)).readSingleValue();

@@ -2,7 +2,7 @@ package io.toadlabs.jfgjds.exception;
 
 import java.io.IOException;
 
-public class JsonParseException extends IOException {
+public final class JsonParseException extends IOException {
 
 	private static final long serialVersionUID = 6065931990953315542L;
 

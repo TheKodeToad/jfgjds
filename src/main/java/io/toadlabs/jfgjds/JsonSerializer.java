@@ -16,7 +16,11 @@ import io.toadlabs.jfgjds.data.JsonObject;
 import io.toadlabs.jfgjds.data.JsonString;
 import io.toadlabs.jfgjds.data.JsonValue;
 
-public class JsonSerializer {
+public final class JsonSerializer {
+
+	private JsonSerializer() {
+		throw new UnsupportedOperationException("Object initialization");
+	}
 
 	public static void write(@NotNull JsonValue value, @NotNull String charset, @NotNull OutputStream out) throws IOException {
 		out.write(toString(value).getBytes(Charset.forName(charset)));

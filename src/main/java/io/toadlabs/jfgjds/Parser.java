@@ -13,7 +13,7 @@ import io.toadlabs.jfgjds.data.JsonString;
 import io.toadlabs.jfgjds.data.JsonValue;
 import io.toadlabs.jfgjds.exception.JsonParseException;
 
-class Parser {
+final class Parser {
 	Reader in;
 	int pos;
 	int length;
