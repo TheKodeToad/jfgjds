@@ -192,16 +192,15 @@ final class Parser {
 		while(read() != '"') {
 			int character = character();
 
+			if(Character.isISOControl(character())) {
+				throw new JsonParseException("Found unescaped control character within string");
+			}
+
 			switch(character) {
 				case -1:
 					throw new JsonParseException("Expected '\"' but got EOF");
 				case '\n':
 					throw new JsonParseException("Expected '\"' but got a newline");
-				case '\b':
-				case '\f':
-				case '\r':
-				case '\t':
-					throw new JsonParseException("Found unescaped control character");
 				case '\\':
 					int seq = read();
 
