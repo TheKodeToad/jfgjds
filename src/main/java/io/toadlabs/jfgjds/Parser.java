@@ -37,7 +37,7 @@ final class Parser {
 
 	int read() throws IOException {
 		if(length == -1) {
-			return 0;
+			return -1;
 		}
 
 		if(buffer == null || pos++ == length - 1) {
