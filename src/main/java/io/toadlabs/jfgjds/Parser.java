@@ -74,7 +74,9 @@ final class Parser {
 	JsonValue readSingleValue() throws IOException {
 		skipWhitespace();
 		JsonValue result = readValue();
-		read();
+		if(!(result instanceof JsonNumber)) {
+			read();
+		}
 		skipWhitespace();
 		if(character() != -1) {
 			throw new JsonParseException("Found trailing non-whitespace characters");
