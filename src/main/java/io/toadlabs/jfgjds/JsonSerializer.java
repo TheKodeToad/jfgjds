@@ -22,11 +22,11 @@ public final class JsonSerializer {
 		throw new UnsupportedOperationException("Object initialization");
 	}
 
-	public static void write(@NotNull JsonValue value, @NotNull String charset, @NotNull OutputStream out) throws IOException {
+	public static void write(@NotNull JsonValue value, @NotNull OutputStream out, @NotNull String charset) throws IOException {
 		out.write(toString(value).getBytes(Charset.forName(charset)));
 	}
 
-	public static void write(@NotNull JsonValue value, @NotNull Charset charset, @NotNull OutputStream out) throws IOException {
+	public static void write(@NotNull JsonValue value, @NotNull OutputStream out, @NotNull Charset charset) throws IOException {
 		out.write(toString(value).getBytes(Objects.requireNonNull(charset)));
 	}
 
