@@ -51,7 +51,7 @@ final class Parser {
 
 	void assertCharacter(char character) throws JsonParseException {
 		if(character() != character) {
-			throw new JsonParseException("Expected '" + character + "' but got '" + (char) character() + "'");
+			throw new JsonParseException("Expected '" + character + "' but got " + (character() != -1 ? ("'" + (char) character() + "'") : "EOF"));
 		}
 	}
 
@@ -120,43 +120,32 @@ final class Parser {
 		JsonObject obj = new JsonObject(new HashMap<>());
 		boolean comma = false;
 
+		read();
+		skipWhitespace();
+
 		while(character() != '}') {
 			if(comma) {
-				assertNoEOF("}");
 				assertCharacter(',');
-			}
-
-			skipWhitespace();
-			read();
-			assertNoEOF("}");
-			skipWhitespace();
-
-			if(character() == '}') {
-				break;
+				read();
+				skipWhitespace();
 			}
 
 			String key = readJString();
-
-			skipWhitespace();
-			assertNoEOF("}");
 			read();
 			skipWhitespace();
-
 			assertCharacter(':');
-			assertNoEOF("}");
-			skipWhitespace();
 			read();
 			skipWhitespace();
 
 			JsonValue value = readValue();
 			obj.put(key, value);
-			comma = true;
-			skipWhitespace();
 
 			if(!(value instanceof JsonNumber)) {
 				read();
-				skipWhitespace();
 			}
+
+			skipWhitespace();
+			comma = true;
 		}
 
 		return obj;
@@ -167,28 +156,25 @@ final class Parser {
 		JsonArray array = new JsonArray();
 		boolean comma = false;
 
+		read();
+		skipWhitespace();
+
 		while(character() != ']') {
 			if(comma) {
 				assertCharacter(',');
-			}
-			skipWhitespace();
-			assertNoEOF("]");
-			read();
-			skipWhitespace();
-
-			if(character() == ']') {
-				break;
+				read();
+				skipWhitespace();
 			}
 
 			JsonValue value = readValue();
 			array.add(value);
-			comma = true;
-			skipWhitespace();
 
 			if(!(value instanceof JsonNumber)) {
 				read();
-				skipWhitespace();
 			}
+
+			skipWhitespace();
+			comma = true;
 		}
 
 		return array;
