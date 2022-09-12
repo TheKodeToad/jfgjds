@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiConsumer;
@@ -11,16 +12,21 @@ import java.util.function.BiConsumer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import io.toadlabs.jfgjds.data.impl.JsonObjectImpl;
+public final class JsonObject extends JsonValue {
 
-public interface JsonObject extends JsonValue {
+	private final Map<String, JsonValue> map;
 
-	static JsonObject clean() {
-		return new JsonObjectImpl(new HashMap<>());
+	public JsonObject() {
+		this(null);
 	}
 
-	static JsonObject of(@NotNull Map<String, JsonValue> map) {
-		return new JsonObjectImpl(map);
+	public JsonObject(@Nullable Map<String, JsonValue> map) {
+		if(map == null) {
+			this.map = new HashMap<>();
+		}
+		else {
+			this.map = new HashMap<>(map);
+		}
 	}
 
 	/**
@@ -28,14 +34,18 @@ public interface JsonObject extends JsonValue {
 	 * @param key The key.
 	 * @return The value, or <code>null</code>.
 	 */
-	@Nullable JsonValue get(String key);
+	public @Nullable JsonValue get(@NotNull String key) {
+		return map.get(Objects.requireNonNull(key));
+	}
 
 	/**
 	 * Gets a value on the object - optional version.
 	 * @param key The key.
 	 * @return An optional value.
 	 */
-	@NotNull Optional<JsonValue> getOpt(String key);
+	public @NotNull Optional<JsonValue> getOpt(@NotNull String key) {
+		return Optional.ofNullable(get(key));
+	}
 
 	/**
 	 * Sets a value in the object.
@@ -43,7 +53,9 @@ public interface JsonObject extends JsonValue {
 	 * @param value The value.
 	 * @return The previous value associated with the key, which may be <code>null</code>.
 	 */
-	@Nullable JsonValue put(String key, JsonValue value);
+	public @Nullable JsonValue put(@NotNull String key, @Nullable JsonValue value) {
+		return map.put(Objects.requireNonNull(key), value);
+	}
 
 	/**
 	 * Sets a value in the object.
@@ -51,14 +63,44 @@ public interface JsonObject extends JsonValue {
 	 * @param value The value.
 	 * @return Optionally, the previous value associated with the key.
 	 */
-	@NotNull Optional<JsonValue> putOpt(String key, JsonValue value);
+	public @NotNull Optional<JsonValue> putOpt(@NotNull String key, @Nullable JsonValue value) {
+		return Optional.ofNullable(put(key, value));
+	}
 
-	@NotNull Set<String> keys();
+	public @NotNull Set<String> keys() {
+		return map.keySet();
+	}
 
-	@NotNull Collection<JsonValue> values();
+	public @NotNull Collection<JsonValue> values() {
+		return map.values();
+	}
 
-	@NotNull Set<Entry<String, JsonValue>> entries();
+	public @NotNull Set<Entry<String, JsonValue>> entries() {
+		return map.entrySet();
+	}
 
-	void forEach(@NotNull BiConsumer<String, JsonValue> action);
+	public void forEach(@NotNull BiConsumer<String, JsonValue> action) {
+		map.forEach(action);
+	}
+
+	@Override
+	public boolean isObject() {
+		return true;
+	}
+
+	@Override
+	public @NotNull JsonObject asObject() {
+		return this;
+	}
+
+	@Override
+	public String toString() {
+		return map.toString();
+	}
+
+	@Override
+	protected String getPrimaryInterface() {
+		return "JsonObject";
+	}
 
 }

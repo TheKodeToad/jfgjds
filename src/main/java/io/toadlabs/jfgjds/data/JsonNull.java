@@ -1,13 +1,28 @@
 package io.toadlabs.jfgjds.data;
 
-import io.toadlabs.jfgjds.data.impl.JsonNullImpl;
-
 /**
  * Empty class used to distinguish <code>null</code> values.
  * There is only one instance.
  */
-public interface JsonNull extends JsonValue {
+public final class JsonNull extends JsonValue {
 
-	JsonNull INSTANCE = JsonNullImpl.INSTANCE;
+	public static final JsonNull INSTANCE = new JsonNull();
+
+	private JsonNull() {}
+
+	@Override
+	public boolean isNull() {
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "null";
+	}
+
+	@Override
+	protected String getPrimaryInterface() {
+		return "JsonNull";
+	}
 
 }

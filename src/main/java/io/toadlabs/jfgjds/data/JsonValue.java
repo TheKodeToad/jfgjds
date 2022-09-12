@@ -18,234 +18,336 @@ import io.toadlabs.jfgjds.exception.JsonElementCastException;
  *   <li>JSON null</li>
  * </ul>
  */
-public interface JsonValue {
+public abstract class JsonValue {
 
 	/**
 	 * Gets whether the JSON value is an object.
 	 * @return <code>true</code> if this is a JSON object.
 	 */
-	boolean isObject();
+	public boolean isObject() {
+		return false;
+	}
 
 	/**
 	 * Gets the JSON value as an object, otherwise throws.
 	 * @return The JSON object.
 	 * @throws JsonElementCastException If the value is not an object.
 	 */
-	@NotNull JsonObject asObject() throws JsonElementCastException;
+	public @NotNull JsonObject asObject() {
+		throw new JsonElementCastException("Not a JsonObject: " + this + " (" + getPrimaryInterface() + ")");
+	}
 
 	/**
 	 * Gets the JSON value as an object - nullable version.
 	 * @return The JSON object, or <code>null</code>.
 	 */
-	@Nullable JsonObject asObjectOrNull();
+	public final @Nullable JsonObject asObjectOrNull() {
+		return isObject() ? asObject() : null;
+	}
 
 	/**
 	 * Gets the JSON value as an object - optional version.
 	 * @return An optional JSON object.
 	 */
-	@NotNull Optional<JsonObject> asObjectObj();
+	public final @NotNull Optional<JsonObject> asObjectOpt() {
+		return Optional.ofNullable(asObjectOrNull());
+	}
 
 	/**
 	 * Gets whether the JSON value is an array.
 	 * @return <code>true</code> if this is a JSON array.
 	 */
-	boolean isArray();
+	public boolean isArray() {
+		return false;
+	}
 
 	/**
 	 * Gets the JSON value as an array, otherwise throws.
 	 * @return The JSON array.
 	 * @throws JsonElementCastException If the value is not an array.
 	 */
-	@NotNull JsonArray asArray() throws JsonElementCastException;
+	public @NotNull JsonArray asArray() throws JsonElementCastException {
+		throw new JsonElementCastException("Not a JsonArray: " + this + " (" + getPrimaryInterface() + ")");
+	}
 
 	/**
 	 * Gets the JSON value as an array - nullable version.
 	 * @return The JSON array, or <code>null</code>.
 	 */
-	@Nullable JsonArray asArrayOrNull();
+	public final @Nullable JsonArray asArrayOrNull() {
+		return isArray() ? asArray() : null;
+	}
 
 	/**
 	 * Gets the JSON value as an array - optional version.
 	 * @return An optional JSON array.
 	 */
-	@NotNull Optional<JsonArray> asArrayOpt();
+	public final @NotNull Optional<JsonArray> asArrayOpt() {
+		return Optional.ofNullable(asArrayOrNull());
+	}
 
 	/**
 	 * Gets whether the JSON value is a string.
 	 * @return <code>true</code> if this is a JSON string.
 	 */
-	boolean isString();
+	public boolean isString() {
+		return false;
+	}
 
 	/**
 	 * Gets the JSON value as a string, otherwise throws.
 	 * @return The JSON string.
 	 * @throws JsonElementCastException If the value is not an string.
 	 */
-	@NotNull JsonString asString() throws JsonElementCastException;
+	public @NotNull JsonString asString() throws JsonElementCastException {
+		throw new JsonElementCastException("Not a JsonString: " + this + " (" + getPrimaryInterface() + ")");
+	}
 
 	/**
 	 * Gets the JSON value as a string - nullable version.
 	 * @return The JSON string, or <code>null</code>.
 	 */
-	@Nullable JsonString asStringOrNull();
+	public final @Nullable JsonString asStringOrNull() {
+		return isString() ? asString() : null;
+	}
 
 	/**
 	 * Gets the JSON value as a string - optional version.
 	 * @return An optional JSON string.
 	 */
-	@NotNull Optional<JsonString> asStringOpt();
+	public final @NotNull Optional<JsonString> asStringOpt() {
+		return Optional.ofNullable(asStringOrNull());
+	}
 
 	/**
 	 * Gets the Java value of the JSON string, otherwise throws.
 	 * @return The Java string.
 	 * @throws JsonElementCastException If the value is not a string.
 	 */
-	@NotNull String getStringValue();
+	public @NotNull String getStringValue() {
+		throw new JsonElementCastException("Not a JsonString: " + this + " (" + getPrimaryInterface() + ")");
+	}
 
 	/**
 	 * Gets the Java value of the JSON string - nullable version.
 	 * @return The Java string, or <code>null</code>.
 	 */
-	@Nullable String getStringValueOrNull();
+	public final @Nullable String getStringValueOrNull() {
+		return isString() ? getStringValue() : null;
+	}
 
 	/**
 	 * Gets the Java value of the JSON string - optional version.
 	 * @return An optional Java string.
 	 */
-	@Nullable Optional<String> getStringValueOpt();
+	public final @NotNull Optional<String> getStringValueOpt() {
+		return Optional.ofNullable(getStringValueOrNull());
+	}
 
 	/**
 	 * Gets whether the JSON value is a number.
 	 * @return <code>true</code> if this is a JSON number.
 	 */
-	boolean isNumber();
+	public boolean isNumber() {
+		return false;
+	}
 
 	/**
 	 * Gets the JSON value as a number, otherwise throws.
 	 * @return The JSON number.
 	 * @throws JsonElementCastException If the value is not an number.
 	 */
-	@NotNull JsonNumber asNumber() throws JsonElementCastException;
+	public @NotNull JsonNumber asNumber() {
+		throw new JsonElementCastException("Not a JsonNumber: " + this + " (" + getPrimaryInterface() + ")");
+	}
 
 	/**
 	 * Gets the JSON value as a number - nullable version.
 	 * @return The JSON number.
 	 */
-	@Nullable JsonNumber asNumberOrNull();
+	public final @Nullable JsonNumber asNumberOrNull() {
+		return isNumber() ? asNumber() : null;
+	}
 
 	/**
 	 * Gets the JSON value as a number - optional version.
 	 * @return An optional JSON number.
 	 */
-	@NotNull Optional<JsonNumber> asNumberOpt();
+	public final @NotNull Optional<JsonNumber> asNumberOpt() {
+		return Optional.ofNullable(asNumberOrNull());
+	}
 
 	/**
 	 * Gets the Java value of the JSON number, otherwise throws.
 	 * @return The Java number.
 	 * @throws JsonElementCastException If the value is not a number.
 	 */
-	@NotNull Number getNumberValue();
+	public @NotNull Number getNumberValue() {
+		throw new JsonElementCastException("Not a JsonNumber: " + this + " (" + getPrimaryInterface() + ")");
+	}
 
-	@Nullable Number getNumberValueOrNull();
+	public final @Nullable Number getNumberValueOrNull() {
+		return isNumber() ? getNumberValue() : null;
+	}
 
-	@NotNull Optional<Number> getNumberValueOpt();
+	public final @NotNull Optional<Number> getNumberValueOpt() {
+		return Optional.ofNullable(getNumberValueOrNull());
+	}
 
-	byte getByteNumberValue();
+	public byte getByteNumberValue() {
+		throw new JsonElementCastException("Not a JsonNumber: " + this + " (" + getPrimaryInterface() + ")");
+	}
 
-	@Nullable Byte getByteNumberValueOrNull();
+	public final @Nullable Byte getByteNumberValueOrNull() {
+		return isNumber() ? getByteNumberValue() : null;
+	}
 
-	@NotNull Optional<Byte> getByteNumberValueOpt();
+	public final @NotNull Optional<Byte> getByteNumberValueOpt() {
+		return Optional.ofNullable(getByteNumberValueOrNull());
+	}
 
-	short getShortNumberValue();
+	public short getShortNumberValue() {
+		throw new JsonElementCastException("Not a JsonNumber: " + this + " (" + getPrimaryInterface() + ")");
+	}
 
-	@Nullable Short getShortNumberValueOrNull();
+	public final @Nullable Short getShortNumberValueOrNull() {
+		return isNumber() ? getShortNumberValue() : null;
+	}
 
-	@NotNull Optional<Short> getShortNumberValueOpt();
+	public final @NotNull Optional<Short> getShortNumberValueOpt() {
+		return Optional.ofNullable(getShortNumberValueOrNull());
+	}
 
-	int getIntNumberValue();
+	public int getIntNumberValue() {
+		throw new JsonElementCastException("Not a JsonNumber: " + this + " (" + getPrimaryInterface() + ")");
+	}
 
-	@Nullable Integer getIntNumberValueOrNull();
+	public final @Nullable Integer getIntNumberValueOrNull() {
+		return isNumber() ? getIntNumberValue() : null;
+	}
 
-	@NotNull Optional<Integer> getIntNumberValueOpt();
+	public final @NotNull Optional<Integer> getIntNumberValueOpt() {
+		return Optional.ofNullable(getIntNumberValueOrNull());
+	}
 
-	long getLongNumberValue();
+	public long getLongNumberValue() {
+		throw new JsonElementCastException("Not a JsonNumber: " + this + " (" + getPrimaryInterface() + ")");
+	}
 
-	@Nullable Long getLongNumberValueOrNull();
+	public final @Nullable Long getLongNumberValueOrNull() {
+		return isNumber() ? getLongNumberValue() : null;
+	}
 
-	@NotNull Optional<Long> getLongNumberValueOpt();
+	public final @NotNull Optional<Long> getLongNumberValueOpt() {
+		return Optional.ofNullable(getLongNumberValueOrNull());
+	}
 
-	float getFloatNumberValue();
+	public float getFloatNumberValue() {
+		throw new JsonElementCastException("Not a JsonNumber: " + this + " (" + getPrimaryInterface() + ")");
+	}
 
-	@Nullable Float getFloatNumberValueOrNull();
+	public final @Nullable Float getFloatNumberValueOrNull() {
+		return isNumber() ? getFloatNumberValue() : null;
+	}
 
-	@NotNull Optional<Float> getFloatNumberValueOpt();
+	public final @NotNull Optional<Float> getFloatNumberValueOpt() {
+		return Optional.ofNullable(getFloatNumberValueOrNull());
+	}
 
-	double getDoubleNumberValue();
+	public double getDoubleNumberValue() {
+		throw new JsonElementCastException("Not a JsonNumber: " + this + " (" + getPrimaryInterface() + ")");
+	}
 
-	@Nullable Double getDoubleNumberValueOrNull();
+	public final @Nullable Double getDoubleNumberValueOrNull() {
+		return isNumber() ? getDoubleNumberValue() : null;
+	}
 
-	@NotNull Optional<Double> getDoubleNumberValueOpt();
+	public final @NotNull Optional<Double> getDoubleNumberValueOpt() {
+		return Optional.ofNullable(getDoubleNumberValueOrNull());
+	}
 
 	/**
 	 * Gets whether the JSON value is a boolean.
 	 * @return <code>true</code> if this is a boolean.
 	 */
-	boolean isBoolean();
+	public boolean isBoolean() {
+		return false;
+	}
 
 	/**
 	 * Gets the JSON value as a boolean, otherwise throws.
 	 * @return The JSON boolean.
 	 * @throws JsonElementCastException If the value is not a boolean.
 	 */
-	@NotNull JsonBoolean asBoolean();
+	public @NotNull JsonBoolean asBoolean() {
+		throw new JsonElementCastException("Not a JsonBoolean: " + this + " (" + getPrimaryInterface() + ")");
+	}
 
 	/**
 	 * Gets the JSON value as a boolean - nullable version.
 	 * @return The JSON boolean.
 	 */
-	@Nullable JsonBoolean asBooleanOrNull();
+	public final @Nullable JsonBoolean asBooleanOrNull() {
+		return isBoolean() ? asBoolean() : null;
+	}
 
 	/**
 	 * Gets the JSON value as a boolean - optional version.
 	 * @return An optional JSON boolean.
 	 */
-	@NotNull Optional<JsonBoolean> asBooleanOpt();
+	public final @NotNull Optional<JsonBoolean> asBooleanOpt() {
+		return Optional.ofNullable(asBooleanOrNull());
+	}
 
 	/**
 	 * Gets the primitive value of the JSON boolean, otherwise throws.
 	 * @return The primitive boolean.
 	 * @throws JsonElementCastException If the value is not a boolean.
 	 */
-	boolean getBooleanValue() throws JsonElementCastException;
+	public boolean getBooleanValue() throws JsonElementCastException {
+		throw new JsonElementCastException("Not a JsonBoolean: " + this + " (" + getPrimaryInterface() + ")");
+	}
 
 	/**
 	 * Gets the nullable boxed value of the JSON boolean.
 	 * @return The value, or <code>null</code>.
 	 */
-	@Nullable Boolean getBooleanValueOrNull();
+	public final @Nullable Boolean getBooleanValueOrNull() {
+		return isBoolean() ? getBooleanValue() : null;
+	}
 
 	/**
 	 * Gets the boxed value of the JSON boolean - optional version.
 	 * @return An optional value.
 	 */
-	@NotNull Optional<Boolean> getBooleanValueOpt();
+	public final @NotNull Optional<Boolean> getBooleanValueOpt() {
+		return Optional.ofNullable(getBooleanValueOrNull());
+	}
 
 	/**
 	 * Gets whether the JSON value is <code>false</code>.
 	 * @return <code>true</code> if this is a JSON boolean with <code>false</code> as its value.
 	 */
-	boolean isFalse();
+	public boolean isFalse() {
+		return false;
+	}
 
 	/**
 	 * Gets whether the JSON value is <code>true</code>.
 	 * @return <code>true</code> if this is a JSON boolean with <code>true</code> as its value.
 	 */
-	boolean isTrue();
+	public boolean isTrue() {
+		return false;
+	}
 
 	/**
 	 * Gets whether the JSON value is <code>null</code>.
 	 * @return <code>true</code> if this is <code>null</code>.
 	 */
-	boolean isNull();
+	public boolean isNull() {
+		return false;
+	}
+
+	protected abstract String getPrimaryInterface();
 
 }

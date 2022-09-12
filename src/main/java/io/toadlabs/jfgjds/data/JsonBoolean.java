@@ -1,12 +1,57 @@
 package io.toadlabs.jfgjds.data;
 
-import io.toadlabs.jfgjds.data.impl.JsonBooleanImpl;
+import org.jetbrains.annotations.NotNull;
 
-public interface JsonBoolean extends JsonValue {
+import io.toadlabs.jfgjds.exception.JsonElementCastException;
 
-	JsonBoolean FALSE = JsonBooleanImpl.FALSE;
-	JsonBoolean TRUE = JsonBooleanImpl.TRUE;
+public final class JsonBoolean extends JsonValue {
 
-	boolean getValue();
+	public static final JsonBoolean FALSE = new JsonBoolean(false);
+	public static final JsonBoolean TRUE = new JsonBoolean(true);
+
+	private final boolean value;
+
+	private JsonBoolean(boolean value) {
+		this.value = value;
+	}
+
+	public boolean getValue() {
+		return value;
+	}
+
+	@Override
+	public boolean isBoolean() {
+		return true;
+	}
+
+	@Override
+	public @NotNull JsonBoolean asBoolean() {
+		return this;
+	}
+
+	@Override
+	public boolean getBooleanValue() throws JsonElementCastException {
+		return getValue();
+	}
+
+	@Override
+	public boolean isFalse() {
+		return !value;
+	}
+
+	@Override
+	public boolean isTrue() {
+		return value;
+	}
+
+	@Override
+	public String toString() {
+		return value ? "true" : "false";
+	}
+
+	@Override
+	protected String getPrimaryInterface() {
+		return "JsonBoolean";
+	}
 
 }

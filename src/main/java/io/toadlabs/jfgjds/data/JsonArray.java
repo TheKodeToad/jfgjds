@@ -1,20 +1,34 @@
 package io.toadlabs.jfgjds.data;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import io.toadlabs.jfgjds.data.impl.JsonArrayImpl;
+import io.toadlabs.jfgjds.exception.JsonElementCastException;
 
-public interface JsonArray extends JsonValue, Iterable<JsonValue> {
+public final class JsonArray extends JsonValue implements Iterable<JsonValue> {
 
-	static JsonArray clean() {
-		return new JsonArrayImpl(new ArrayList<>());
+	private final List<JsonValue> list;
+
+	public JsonArray() {
+		this(null);
 	}
 
-	static JsonArray of(@NotNull List<JsonValue> list) {
-		return new JsonArrayImpl(list);
+	public JsonArray(@Nullable List<JsonValue> list) {
+		if(list == null) {
+			this.list = new ArrayList<>();
+		}
+		else {
+			this.list = new ArrayList<>(list);
+		}
+	}
+
+	@Override
+	public Iterator<JsonValue> iterator() {
+		return list.iterator();
 	}
 
 	/**
@@ -23,14 +37,36 @@ public interface JsonArray extends JsonValue, Iterable<JsonValue> {
 	 * @return The value.
 	 * @throws IndexOutOfBoundsException If the index is out of range.
 	 */
-	@NotNull JsonValue get(int index) throws IndexOutOfBoundsException;
+	public @NotNull JsonValue get(int index) throws IndexOutOfBoundsException {
+		return list.get(index);
+	}
 
-	/**
-	 * Gets the size of the JSON array.
-	 * @return The size.
-	 */
-	int size();
+	public int size() {
+		return list.size();
+	}
 
-	void add(@NotNull JsonValue value);
+	@Override
+	protected String getPrimaryInterface() {
+		return "JsonArray";
+	}
+
+	public void add(@NotNull JsonValue value) {
+		list.add(value);
+	}
+
+	@Override
+	public String toString() {
+		return list.toString();
+	}
+
+	@Override
+	public boolean isArray() {
+		return true;
+	}
+
+	@Override
+	public @NotNull JsonArray asArray() throws JsonElementCastException {
+		return this;
+	}
 
 }

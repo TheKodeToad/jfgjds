@@ -1,29 +1,102 @@
 package io.toadlabs.jfgjds.data;
 
+import java.util.Objects;
+
 import org.jetbrains.annotations.NotNull;
 
-import io.toadlabs.jfgjds.data.impl.JsonNumberImpl;
+public final class JsonNumber extends JsonValue {
 
-public interface JsonNumber extends JsonValue {
+	private final Number value;
 
-	static JsonNumber of(@NotNull Number value) {
-		return new JsonNumberImpl(value);
+	public JsonNumber(@NotNull Number value) {
+		this.value = Objects.requireNonNull(value);
 	}
 
-	@NotNull Number getValue();
+	public Number getValue() {
+		return value;
+	}
 
-	byte getByteValue();
+	public byte getByteValue() {
+		return (byte) getValue();
+	}
 
-	short getShortValue();
+	@Override
+	public byte getByteNumberValue() {
+		return getByteValue();
+	}
 
-	int getIntValue();
+	public short getShortValue() {
+		return (short) getValue();
+	}
 
-	long getLongValue();
+	@Override
+	public short getShortNumberValue() {
+		return getShortValue();
+	}
 
-	float getFloatValue();
+	public int getIntValue() {
+		return (int) value;
+	}
 
-	double getDoubleValue();
+	@Override
+	public int getIntNumberValue() {
+		return getIntValue();
+	}
 
-	@NotNull Class<? extends Number> getValueType();
+	public long getLongValue() {
+		return (long) value;
+	}
+
+	@Override
+	public long getLongNumberValue() {
+		return getLongValue();
+	}
+
+	public float getFloatValue() {
+		return (float) value;
+	}
+
+	@Override
+	public float getFloatNumberValue() {
+		return getFloatValue();
+	}
+
+	public double getDoubleValue() {
+		return (double) value;
+	}
+
+	@Override
+	public double getDoubleNumberValue() {
+		return getDoubleValue();
+	}
+
+	public @NotNull Class<? extends Number> getValueType() {
+		return getValue().getClass();
+	}
+
+	@Override
+	public boolean isNumber() {
+		return true;
+	}
+
+	@Override
+	public JsonNumber asNumber() {
+		return this;
+	}
+
+	@Override
+	public @NotNull Number getNumberValue() {
+		return getValue();
+	}
+
+	@Override
+	public String toString() {
+		return value.toString();
+	}
+
+	@Override
+	protected String getPrimaryInterface() {
+		return "JsonNumber";
+	}
 
 }

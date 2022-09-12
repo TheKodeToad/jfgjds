@@ -2,6 +2,7 @@ package io.toadlabs.jfgjds;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.util.HashMap;
 
 import io.toadlabs.jfgjds.data.JsonArray;
 import io.toadlabs.jfgjds.data.JsonBoolean;
@@ -10,7 +11,6 @@ import io.toadlabs.jfgjds.data.JsonNumber;
 import io.toadlabs.jfgjds.data.JsonObject;
 import io.toadlabs.jfgjds.data.JsonString;
 import io.toadlabs.jfgjds.data.JsonValue;
-import io.toadlabs.jfgjds.data.impl.JsonNumberImpl;
 import io.toadlabs.jfgjds.exception.JsonParseException;
 
 class Parser {
@@ -51,7 +51,7 @@ class Parser {
 
 	void assertCharacter(char character) throws JsonParseException {
 		if(character() != character()) {
-			throw new JsonParseException("Expected '" + character() + "' but got '" + this.character() + "'");
+			throw new JsonParseException("Expected '" + character + "' but got '" + this.character() + "'");
 		}
 	}
 
@@ -62,11 +62,11 @@ class Parser {
 	}
 
 	void skipWhitespace() throws IOException {
-		while(isWhitespace(character()))
+		while(isWhitespace())
 			read();
 	}
 
-	boolean isWhitespace(int character) {
+	boolean isWhitespace() {
 		return character() == ' ' || character() == '\n' || character() == '\r' || character() == '\t';
 	}
 
@@ -115,7 +115,7 @@ class Parser {
 
 	JsonObject readObject() throws IOException {
 		assertCharacter('{');
-		JsonObject obj = JsonObject.clean();
+		JsonObject obj = new JsonObject(new HashMap<>());
 		boolean comma = false;
 
 		do {
@@ -163,7 +163,7 @@ class Parser {
 
 	JsonArray readArray() throws IOException {
 		assertCharacter('[');
-		JsonArray array = JsonArray.clean();
+		JsonArray array = new JsonArray();
 		boolean comma = false;
 
 		do {
@@ -181,6 +181,7 @@ class Parser {
 
 			JsonValue value = readValue();
 			array.add(value);
+			comma = true;
 			skipWhitespace();
 
 			if(!(value instanceof JsonNumber)) {
@@ -194,7 +195,7 @@ class Parser {
 	}
 
 	JsonString readString() throws IOException {
-		return JsonString.of(readJString());
+		return new JsonString(readJString());
 	}
 
 	String readJString() throws IOException {
@@ -283,7 +284,7 @@ class Parser {
 		boolean hadPoint = false;
 		StringBuilder number = new StringBuilder();
 		// read until characters don't match palette.
-		while(character() != -1 && !isWhitespace(character())
+		while(character() != -1 && !isWhitespace()
 				&& (Character.isDigit(character()) || character() == '-' || character() == '+' || character() == 'e'
 						|| character() == 'E' || character() == 'e' || character() == '.')) {
 			hadPoint |= character() == '.';
@@ -299,23 +300,23 @@ class Parser {
 				boolean fitsInt = value % 1 == 0;
 				if((float) value == value) {
 					if(fitsInt) {
-						return new JsonNumberImpl((int) value);
+						return new JsonNumber((int) value);
 					}
-					return new JsonNumberImpl((float) value);
+					return new JsonNumber((float) value);
 				}
 
 				if(fitsInt) {
-					return new JsonNumberImpl((long) value);
+					return new JsonNumber((long) value);
 				}
-				return new JsonNumberImpl(value);
+				return new JsonNumber(value);
 			}
 
 			long value = Long.parseLong(numberString);
 			if(value <= Integer.MAX_VALUE && value >= Integer.MIN_VALUE) {
-				return new JsonNumberImpl((int) value);
+				return new JsonNumber((int) value);
 			}
 
-			return new JsonNumberImpl(value);
+			return new JsonNumber(value);
 		}
 		catch(NumberFormatException error) {
 			throw new JsonParseException("Cannot parse number " + numberString);
