@@ -86,7 +86,8 @@ final class Parser {
 
 	JsonValue readValue() throws IOException {
 		assertNoEOF("a value");
-		switch(character()) {
+		int character = character();
+		switch(character) {
 			case '{':
 				return readObject();
 			case '[':
@@ -109,12 +110,12 @@ final class Parser {
 				break;
 		}
 
-		if(character() == '-' || Character.isDigit(character())) {
+		if(character == '-' || Character.isDigit(character)) {
 			// probably a number
 			return readNumber();
 		}
 
-		throw new JsonParseException("Expected a JSON value");
+		throw new JsonParseException("Expected a JSON value but got '" + (char) character + "'");
 	}
 
 	JsonObject readObject() throws IOException {
