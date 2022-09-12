@@ -50,8 +50,8 @@ final class Parser {
 	}
 
 	void assertCharacter(char character) throws JsonParseException {
-		if(character() != character()) {
-			throw new JsonParseException("Expected '" + character + "' but got '" + this.character() + "'");
+		if(character() != character) {
+			throw new JsonParseException("Expected '" + character + "' but got '" + (char) character() + "'");
 		}
 	}
 
@@ -62,8 +62,9 @@ final class Parser {
 	}
 
 	void skipWhitespace() throws IOException {
-		while(isWhitespace())
+		while(isWhitespace()) {
 			read();
+		}
 	}
 
 	boolean isWhitespace() {
@@ -71,6 +72,7 @@ final class Parser {
 	}
 
 	JsonValue readSingleValue() throws IOException {
+		skipWhitespace();
 		JsonValue result = readValue();
 		read();
 		skipWhitespace();
