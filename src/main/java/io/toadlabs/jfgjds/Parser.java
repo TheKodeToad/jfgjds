@@ -120,7 +120,7 @@ final class Parser {
 		JsonObject obj = new JsonObject(new HashMap<>());
 		boolean comma = false;
 
-		do {
+		while(character() != '}') {
 			if(comma) {
 				assertNoEOF("}");
 				assertCharacter(',');
@@ -132,7 +132,7 @@ final class Parser {
 			skipWhitespace();
 
 			if(character() == '}') {
-				return obj;
+				break;
 			}
 
 			String key = readJString();
@@ -158,7 +158,6 @@ final class Parser {
 				skipWhitespace();
 			}
 		}
-		while(character() != '}');
 
 		return obj;
 	}
@@ -168,7 +167,7 @@ final class Parser {
 		JsonArray array = new JsonArray();
 		boolean comma = false;
 
-		do {
+		while(character() != ']') {
 			if(comma) {
 				assertCharacter(',');
 			}
@@ -178,7 +177,7 @@ final class Parser {
 			skipWhitespace();
 
 			if(character() == ']') {
-				return array;
+				break;
 			}
 
 			JsonValue value = readValue();
@@ -191,7 +190,6 @@ final class Parser {
 				skipWhitespace();
 			}
 		}
-		while(character() != ']');
 
 		return array;
 	}
