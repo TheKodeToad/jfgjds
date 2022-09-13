@@ -141,6 +141,57 @@ public final class JsonObject extends JsonValue {
 	}
 
 	/**
+	 * Removes a value by its key.
+	 * @param key The key.
+	 * @return <code>this</code>, for chaining.
+	 */
+	public @NotNull JsonObject remove(@NotNull String key) {
+		map.remove(key);
+		return this;
+	}
+
+	/**
+	 * Removes a key from the map, only if it matches the specified value.
+	 * @param key The key.
+	 * @param value The value.
+	 * @return <code>this</code>, for chaining.
+	 */
+	public @NotNull JsonObject remove(@NotNull String key, @NotNull JsonValue value) {
+		map.remove(key, value);
+		return this;
+	}
+
+	/**
+	 * Removes a key from the map, only if it matches the specified value.
+	 * @param key The key.
+	 * @param value The value.
+	 * @return <code>this</code>, for chaining.
+	 */
+	public @NotNull JsonObject remove(@NotNull String key, @NotNull String value) {
+		return remove(key, new JsonString(value));
+	}
+
+	/**
+	 * Removes a key from the map, only if it matches the specified value.
+	 * @param key The key.
+	 * @param value The value.
+	 * @return <code>this</code>, for chaining.
+	 */
+	public @NotNull JsonObject remove(@NotNull String key, double value) {
+		return remove(key, new JsonNumber(value));
+	}
+
+	/**
+	 * Removes a key from the map, only if it matches the specified value.
+	 * @param key The key.
+	 * @param value The value.
+	 * @return <code>this</code>, for chaining.
+	 */
+	public @NotNull JsonObject remove(@NotNull String key, boolean value) {
+		return remove(key, value ? JsonBoolean.TRUE : JsonBoolean.FALSE);
+	}
+
+	/**
 	 * Gets whether the object contains a mapping from the specified key.
 	 * @param key The key.
 	 * @return <code>true</code> if the key is present.

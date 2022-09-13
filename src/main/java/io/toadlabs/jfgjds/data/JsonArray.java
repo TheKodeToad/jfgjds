@@ -107,10 +107,83 @@ public final class JsonArray extends JsonValue implements Iterable<JsonValue> {
 		return this;
 	}
 
+	/**
+	 * Removes a value by its index.
+	 * @param index The index.
+	 * @return <code>this</code>, for chaining.
+	 * @throws IndexOutOfBoundsException If the index is out of range.
+	 */
+	public @NotNull JsonArray remove(int index) throws IndexOutOfBoundsException {
+		list.remove(index);
+		return this;
+	}
+
+	/**
+	 * Removes a value from the array.
+	 * @param value The value.
+	 * @return <code>this</code>, for chaining.
+	 * @throws IndexOutOfBoundsException If the index is out of range.
+	 */
+	public @NotNull JsonArray remove(@NotNull JsonValue value) throws IndexOutOfBoundsException {
+		list.remove(value);
+		return this;
+	}
+
+	/**
+	 * Removes a value from the array.
+	 * @param value The value.
+	 * @return <code>this</code>, for chaining.
+	 * @throws IndexOutOfBoundsException If the index is out of range.
+	 */
+	public @NotNull JsonArray remove(@NotNull String value) throws IndexOutOfBoundsException {
+		list.remove(new JsonString(value));
+		return this;
+	}
+
+	/**
+	 * Removes a value from the array.
+	 * @param value The value.
+	 * @return <code>this</code>, for chaining.
+	 * @throws IndexOutOfBoundsException If the index is out of range.
+	 */
+	public @NotNull JsonArray remove(@NotNull double value) throws IndexOutOfBoundsException {
+		list.remove(new JsonNumber(value));
+		return this;
+	}
+
+	/**
+	 * Removes a value from the array.
+	 * @param value The value.
+	 * @return <code>this</code>, for chaining.
+	 * @throws IndexOutOfBoundsException If the index is out of range.
+	 */
+	public @NotNull JsonArray remove(@NotNull boolean value) throws IndexOutOfBoundsException {
+		list.remove(value ? JsonBoolean.TRUE : JsonBoolean.FALSE);
+		return this;
+	}
+
+	/**
+	 * Removes the first null in the array.
+	 * @return <code>this</code>, for chaining.
+	 * @throws IndexOutOfBoundsException If the index is out of range.
+	 */
+	public @NotNull JsonArray removeNull() throws IndexOutOfBoundsException {
+		list.remove(JsonNull.INSTANCE);
+		return this;
+	}
+
+	/**
+	 * Gets the size of the array.
+	 * @return The size.
+	 */
 	public int size() {
 		return list.size();
 	}
 
+	/**
+	 * Gets whether the array is empty.
+	 * @return <code>true</code> if the size is <code>0</code>.
+	 */
 	public boolean isEmpty() {
 		return list.isEmpty();
 	}
