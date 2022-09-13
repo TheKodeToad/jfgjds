@@ -58,30 +58,6 @@ public final class JsonObject extends JsonValue {
 
 		return result;
 	}
-//
-//	private static @NotNull JsonObject fromGenericMap(String key, @NotNull Map<?, ?> map) {
-//		JsonObject value;
-//
-//		if(map.isEmpty()) {
-//			return new JsonObject();
-//		}
-//
-//		boolean wrong = false;
-//
-//		for(Map.Entry<?, ?> entry : map.entrySet()) {
-//			if(!(entry.getKey() instanceof String || entry.getKey() == null)
-//					|| !(entry.getValue() instanceof JsonValue || entry.getValue() == null)) {
-//				wrong = true;
-//				break;
-//			}
-//		}
-//
-//		if(wrong) {
-//			return null;
-//		}
-//
-//		return new JsonObject(map);
-//	}
 
 	public JsonObject() {
 		this(null);
@@ -162,6 +138,24 @@ public final class JsonObject extends JsonValue {
 	 */
 	public @NotNull JsonObject putNull(@NotNull String key) {
 		return put(key, JsonNull.INSTANCE);
+	}
+
+	/**
+	 * Gets whether the object contains a mapping from the specified key.
+	 * @param key The key.
+	 * @return <code>true</code> if the key is present.
+	 */
+	public boolean contains(@NotNull String key) {
+		return map.containsKey(key);
+	}
+
+	/**
+	 * Gets whether the object contains the specified value.
+	 * @param value The value.
+	 * @return <code>true</code> if the value is present.
+	 */
+	public boolean contains(@NotNull JsonValue value) {
+		return map.containsValue(value);
 	}
 
 	public @UnknownNullability JsonValue computeIfAbsent(@NotNull String key, @NotNull Function<String, JsonValue> mappingFunction) {
