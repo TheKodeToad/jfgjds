@@ -19,6 +19,8 @@ public final class JsonObject extends JsonValue {
 
 	private final Map<String, JsonValue> map;
 
+	public static final Function<String, JsonValue> DEFAULT_COMPUTION = (ignored) -> new JsonObject();
+
 	/**
 	 * A helper method to create an object similar to how you would in other languages.
 	 * Values will be converted automatically.

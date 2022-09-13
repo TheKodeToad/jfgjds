@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -15,6 +16,8 @@ import io.toadlabs.jfgjds.exception.JsonElementCastException;
 public final class JsonArray extends JsonValue implements Iterable<JsonValue> {
 
 	private final List<JsonValue> list;
+
+	public static final Function<String, JsonValue> DEFAULT_COMPUTION = (ignored) -> new JsonArray();
 
 	/**
 	 * A helper method to create an array similar to how you would in other languages.
