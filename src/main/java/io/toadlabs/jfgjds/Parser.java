@@ -343,39 +343,6 @@ final class Parser {
 		return new JsonNumber(Double.parseDouble(result.toString()));
 	}
 
-//	static final long MIN_NEGATIVE = Long.MIN_VALUE / 10;
-//	static final long MIN_POSITIVE = -Long.MAX_VALUE / 10;
-//
-//	long readLong(boolean negative, boolean exponent, boolean decimal) throws IOException {
-//		long min = negative ? MIN_NEGATIVE : MIN_POSITIVE;
-//
-//		int digit;
-//
-//		long result = 0;
-//
-//		while(character() != -1 && (exponent || (character() != 'e' && character() != 'E'))
-//				&& (!decimal || character() != '.') && !isWhitespace()) {
-//			digit = character() - '0';
-//			if(digit < 0 || digit > 9) {
-//				throw new JsonParseException("Expected digit but got '" + (char) character() + "'");
-//			}
-//			result *= 10;
-//
-//			if(result < min + digit) {
-//				throw new JsonParseException("Number cannot be represented as long");
-//			}
-//
-//			result -= digit;
-//			read();
-//		}
-//
-//		if(!negative) {
-//			result = -result;
-//		}
-//
-//		return result;
-//	}
-
 	JsonBoolean readBoolean() throws IOException {
 		if(character() == 't') {
 			if(read() == 'r' && read() == 'u' && read() == 'e') {
