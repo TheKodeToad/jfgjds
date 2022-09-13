@@ -340,7 +340,14 @@ final class Parser {
 			}
 		}
 
-		return new JsonNumber(Double.parseDouble(result.toString()));
+		String resultStr = result.toString();
+
+		try {
+			return new JsonNumber(Double.parseDouble(resultStr));
+		}
+		catch(NumberFormatException error) {
+			throw new JsonParseException("Failed to parse number '" + resultStr + "'");
+		}
 	}
 
 	JsonBoolean readBoolean() throws IOException {
