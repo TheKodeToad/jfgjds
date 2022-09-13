@@ -8,13 +8,80 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 
 public final class JsonObject extends JsonValue {
 
 	private final Map<String, JsonValue> map;
+
+	/**
+	 * A helper method to create an object similar to how you would in other languages.
+	 * Values will be converted automatically.
+	 * @param values An array of key value pairs.
+	 * @return The object.
+	 */
+	public static @NotNull JsonObject of(Object... values) {
+		if(values.length % 2 != 0) {
+			throw new IllegalArgumentException("Uneven argument length");
+		}
+
+		Map<Object, Object> map = new HashMap<>();
+		Object key = null;
+		Object item;
+
+		for(int index = 0; index < values.length; index++) {
+			item = values[index];
+
+			if(index % 2 == 0) {
+				key = values[index];
+				continue;
+			}
+
+			map.put(key, item);
+		}
+
+		return ofCoerced(map);
+	}
+
+	public static @NotNull JsonObject ofCoerced(Map<Object, Object> map) {
+		JsonObject result = new JsonObject();
+
+		map.forEach((_key, value) -> {
+			String key = Objects.toString(_key);
+			result.put(key, JsonValue.coerce(value));
+		});
+
+		return result;
+	}
+//
+//	private static @NotNull JsonObject fromGenericMap(String key, @NotNull Map<?, ?> map) {
+//		JsonObject value;
+//
+//		if(map.isEmpty()) {
+//			return new JsonObject();
+//		}
+//
+//		boolean wrong = false;
+//
+//		for(Map.Entry<?, ?> entry : map.entrySet()) {
+//			if(!(entry.getKey() instanceof String || entry.getKey() == null)
+//					|| !(entry.getValue() instanceof JsonValue || entry.getValue() == null)) {
+//				wrong = true;
+//				break;
+//			}
+//		}
+//
+//		if(wrong) {
+//			return null;
+//		}
+//
+//		return new JsonObject(map);
+//	}
 
 	public JsonObject() {
 		this(null);
@@ -51,20 +118,62 @@ public final class JsonObject extends JsonValue {
 	 * Sets a value in the object.
 	 * @param key The key.
 	 * @param value The value.
-	 * @return The previous value associated with the key, which may be <code>null</code>.
+	 * @return <code>this</code>, for chaining.
 	 */
-	public @Nullable JsonValue put(@NotNull String key, @Nullable JsonValue value) {
-		return map.put(Objects.requireNonNull(key), value);
+	public @NotNull JsonObject put(@NotNull String key, @Nullable JsonValue value) {
+		map.put(Objects.requireNonNull(key), value);
+		return this;
 	}
 
 	/**
-	 * Sets a value in the object.
+	 * Sets a string in the object.
+	 * @param key The key.
+	 * @param value The string.
+	 * @return <code>this</code>, for chaining.
+	 */
+	public @NotNull JsonObject put(@NotNull String key, @Nullable String value) {
+		return put(key, new JsonString(value));
+	}
+
+	/**
+	 * Sets a number in the object.
 	 * @param key The key.
 	 * @param value The value.
-	 * @return Optionally, the previous value associated with the key.
+	 * @return <code>this</code>, for chaining.
 	 */
-	public @NotNull Optional<JsonValue> putOpt(@NotNull String key, @Nullable JsonValue value) {
-		return Optional.ofNullable(put(key, value));
+	public @NotNull JsonObject put(@NotNull String key, @Nullable double value) {
+		return put(key, new JsonNumber(value));
+	}
+
+	/**
+	 * Sets a boolean in the object.
+	 * @param key The key.
+	 * @param value The value.
+	 * @return <code>this</code>, for chaining.
+	 */
+	public @NotNull JsonObject put(@NotNull String key, @Nullable boolean value) {
+		return put(key, value ? JsonBoolean.TRUE : JsonBoolean.FALSE);
+	}
+
+	/**
+	 * Sets JSON null in the object.
+	 * @param key The key.
+	 * @return <code>this</code>, for chaining.
+	 */
+	public @NotNull JsonObject putNull(@NotNull String key) {
+		return put(key, JsonNull.INSTANCE);
+	}
+
+	public @UnknownNullability JsonValue computeIfAbsent(@NotNull String key, @NotNull Function<String, JsonValue> mappingFunction) {
+		return map.computeIfAbsent(key, mappingFunction);
+	}
+
+	public @UnknownNullability JsonValue computeIfPresent(@NotNull String key, @NotNull BiFunction<? super String, ? super JsonValue, ? extends JsonValue> mappingFunction) {
+		return map.computeIfPresent(key, mappingFunction);
+	}
+
+	public @UnknownNullability JsonValue compute(@NotNull String key, @NotNull BiFunction<? super String, ? super JsonValue, ? extends JsonValue> remappingFunction) {
+		return map.compute(key, remappingFunction);
 	}
 
 	public @NotNull Set<String> keys() {
@@ -77,6 +186,10 @@ public final class JsonObject extends JsonValue {
 
 	public @NotNull Set<Entry<String, JsonValue>> entries() {
 		return map.entrySet();
+	}
+
+	public int size() {
+		return map.size();
 	}
 
 	public void forEach(@NotNull BiConsumer<String, JsonValue> action) {
@@ -94,13 +207,27 @@ public final class JsonObject extends JsonValue {
 	}
 
 	@Override
-	public String toString() {
-		return map.toString();
+	protected String getPrimaryInterface() {
+		return "JsonObject";
 	}
 
 	@Override
-	protected String getPrimaryInterface() {
-		return "JsonObject";
+	public int hashCode() {
+		return map.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(this == obj) {
+			return true;
+		}
+
+		if(!(obj instanceof JsonObject)) {
+			return false;
+		}
+
+		JsonObject other = (JsonObject) obj;
+		return map.equals(other.map);
 	}
 
 }

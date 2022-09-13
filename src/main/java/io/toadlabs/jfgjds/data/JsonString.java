@@ -38,13 +38,27 @@ public final class JsonString extends JsonValue {
 	}
 
 	@Override
-	public String toString() {
-		return value;
+	protected String getPrimaryInterface() {
+		return "JsonString";
 	}
 
 	@Override
-	protected String getPrimaryInterface() {
-		return "JsonString";
+	public int hashCode() {
+		return value.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(this == obj) {
+			return true;
+		}
+
+		if(!(obj instanceof JsonString)) {
+			return false;
+		}
+
+		JsonString other = (JsonString) obj;
+		return Objects.equals(value, other.value);
 	}
 
 }

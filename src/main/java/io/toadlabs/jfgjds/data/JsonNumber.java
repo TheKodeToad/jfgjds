@@ -81,13 +81,27 @@ public final class JsonNumber extends JsonValue {
 	}
 
 	@Override
-	public String toString() {
-		return Double.toString(value);
+	protected String getPrimaryInterface() {
+		return "JsonNumber";
 	}
 
 	@Override
-	protected String getPrimaryInterface() {
-		return "JsonNumber";
+	public int hashCode() {
+		return Double.hashCode(value);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(this == obj) {
+			return true;
+		}
+
+		if(!(obj instanceof JsonNumber)) {
+			return false;
+		}
+
+		JsonNumber other = (JsonNumber) obj;
+		return Double.doubleToLongBits(value) == Double.doubleToLongBits(other.value);
 	}
 
 }

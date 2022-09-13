@@ -45,13 +45,10 @@ public final class JsonBoolean extends JsonValue {
 	}
 
 	@Override
-	public String toString() {
-		return value ? "true" : "false";
-	}
-
-	@Override
 	protected String getPrimaryInterface() {
 		return "JsonBoolean";
 	}
+
+	// no need for hashCode and equals since there is only true and false
 
 }

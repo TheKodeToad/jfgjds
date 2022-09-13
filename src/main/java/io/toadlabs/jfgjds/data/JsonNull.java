@@ -16,13 +16,10 @@ public final class JsonNull extends JsonValue {
 	}
 
 	@Override
-	public String toString() {
-		return "null";
-	}
-
-	@Override
 	protected String getPrimaryInterface() {
 		return "JsonNull";
 	}
+
+	// no need for hashCode and equals since there is only one instance
 
 }

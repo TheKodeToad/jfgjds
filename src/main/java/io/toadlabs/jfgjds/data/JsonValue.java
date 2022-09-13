@@ -1,10 +1,13 @@
 package io.toadlabs.jfgjds.data;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import io.toadlabs.jfgjds.JsonSerializer;
 import io.toadlabs.jfgjds.exception.JsonElementCastException;
 
 /**
@@ -19,6 +22,37 @@ import io.toadlabs.jfgjds.exception.JsonElementCastException;
  * </ul>
  */
 public abstract class JsonValue {
+
+	public static @NotNull JsonValue coerce(Object value) {
+		if(value == null) {
+			return JsonNull.INSTANCE;
+		}
+		else if(value instanceof JsonValue) {
+			return (JsonValue) value;
+		}
+		else if(value instanceof String) {
+			return new JsonString((String) value);
+		}
+		else if(value instanceof Number) {
+			return new JsonNumber(((Number) value).doubleValue());
+		}
+		else if(value instanceof Boolean) {
+			return (boolean) value ? JsonBoolean.TRUE : JsonBoolean.FALSE;
+		}
+		else if(value instanceof Map) {
+			return JsonObject.ofCoerced((Map<Object, Object>) value);
+		}
+		else if(value instanceof List) {
+			return JsonArray.of((List<Object>) value);
+		}
+		else if(value instanceof Object[]) {
+			return JsonArray.of((Object[]) value);
+		}
+		else {
+			return new JsonString(value.toString());
+		}
+	}
+
 
 	/**
 	 * Gets whether the JSON value is an object.
@@ -346,6 +380,11 @@ public abstract class JsonValue {
 	 */
 	public boolean isNull() {
 		return false;
+	}
+
+	@Override
+	public final String toString() {
+		return JsonSerializer.toString(this);
 	}
 
 	protected abstract String getPrimaryInterface();
