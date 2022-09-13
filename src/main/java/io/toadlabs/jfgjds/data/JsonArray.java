@@ -136,8 +136,7 @@ public final class JsonArray extends JsonValue implements Iterable<JsonValue> {
 	 * @throws IndexOutOfBoundsException If the index is out of range.
 	 */
 	public @NotNull JsonArray remove(@NotNull String value) throws IndexOutOfBoundsException {
-		list.remove(new JsonString(value));
-		return this;
+		return remove(new JsonString(value));
 	}
 
 	/**
@@ -147,8 +146,7 @@ public final class JsonArray extends JsonValue implements Iterable<JsonValue> {
 	 * @throws IndexOutOfBoundsException If the index is out of range.
 	 */
 	public @NotNull JsonArray remove(@NotNull double value) throws IndexOutOfBoundsException {
-		list.remove(new JsonNumber(value));
-		return this;
+		return remove(new JsonNumber(value));
 	}
 
 	/**
@@ -158,8 +156,7 @@ public final class JsonArray extends JsonValue implements Iterable<JsonValue> {
 	 * @throws IndexOutOfBoundsException If the index is out of range.
 	 */
 	public @NotNull JsonArray remove(@NotNull boolean value) throws IndexOutOfBoundsException {
-		list.remove(value ? JsonBoolean.TRUE : JsonBoolean.FALSE);
-		return this;
+		return remove(value ? JsonBoolean.TRUE : JsonBoolean.FALSE);
 	}
 
 	/**
@@ -168,8 +165,7 @@ public final class JsonArray extends JsonValue implements Iterable<JsonValue> {
 	 * @throws IndexOutOfBoundsException If the index is out of range.
 	 */
 	public @NotNull JsonArray removeNull() throws IndexOutOfBoundsException {
-		list.remove(JsonNull.INSTANCE);
-		return this;
+		return remove(JsonNull.INSTANCE);
 	}
 
 	/**
