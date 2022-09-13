@@ -126,11 +126,27 @@ public final class JsonSerializer {
 	}
 
 	private static void write(JsonNumber number, StringBuilder out) {
-		out.append(number.getValue());
+		double value = number.getValue();
+
+		if(Double.isInfinite(value)) {
+			if(value == Double.NEGATIVE_INFINITY) {
+				out.append('-');
+			}
+			// just to be sure that it's defintely Infinity
+			out.append("1E99999");
+			return;
+		}
+		else if(value != value) {
+			// cannot be represented
+			writeNull(out);
+			return;
+		}
+
+		out.append(value);
 	}
 
 	private static void write(JsonBoolean bool, StringBuilder out) {
-		out.append(bool.getValue() ? "true" : "false");
+		out.append(bool.getValue());
 	}
 
 	private static void writeNull(StringBuilder out) {

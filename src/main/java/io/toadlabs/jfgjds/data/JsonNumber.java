@@ -6,13 +6,13 @@ import org.jetbrains.annotations.NotNull;
 
 public final class JsonNumber extends JsonValue {
 
-	private final Number value;
+	private final double value;
 
-	public JsonNumber(@NotNull Number value) {
+	public JsonNumber(@NotNull double value) {
 		this.value = Objects.requireNonNull(value);
 	}
 
-	public Number getValue() {
+	public double getValue() {
 		return value;
 	}
 
@@ -62,16 +62,7 @@ public final class JsonNumber extends JsonValue {
 	}
 
 	public double getDoubleValue() {
-		return (double) value;
-	}
-
-	@Override
-	public double getDoubleNumberValue() {
-		return getDoubleValue();
-	}
-
-	public @NotNull Class<? extends Number> getValueType() {
-		return getValue().getClass();
+		return getValue();
 	}
 
 	@Override
@@ -85,13 +76,13 @@ public final class JsonNumber extends JsonValue {
 	}
 
 	@Override
-	public @NotNull Number getNumberValue() {
+	public @NotNull double getNumberValue() {
 		return getValue();
 	}
 
 	@Override
 	public String toString() {
-		return value.toString();
+		return Double.toString(value);
 	}
 
 	@Override

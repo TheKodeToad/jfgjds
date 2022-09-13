@@ -86,7 +86,9 @@ final class Parser {
 
 	JsonValue readValue() throws IOException {
 		assertNoEOF("a value");
+
 		int character = character();
+
 		switch(character) {
 			case '{':
 				return readObject();
@@ -110,7 +112,7 @@ final class Parser {
 				break;
 		}
 
-		if(character == '-' || Character.isDigit(character)) {
+		if(character == '-' || isDigit()) {
 			// probably a number
 			return readNumber();
 		}
@@ -195,7 +197,7 @@ final class Parser {
 		while(read() != '"') {
 			int character = character();
 
-			if(Character.isISOControl(character())) {
+			if(character >= '\u0000' && character <= '\u001F') {
 				throw new JsonParseException("Found unescaped control character within string");
 			}
 
@@ -204,6 +206,11 @@ final class Parser {
 					throw new JsonParseException("Expected '\"' but got EOF");
 				case '\n':
 					throw new JsonParseException("Expected '\"' but got a newline");
+				case 0x7F:
+					if(read() == '"') {
+						return result.toString();
+					}
+					continue;
 				case '\\':
 					int seq = read();
 
@@ -268,48 +275,106 @@ final class Parser {
 		return result.toString();
 	}
 
+	boolean isDigit() {
+		return character() >= '0' && character() <= '9';
+	}
+
 	JsonNumber readNumber() throws IOException {
-		boolean hadPoint = false;
-		StringBuilder number = new StringBuilder();
-		// read until characters don't match palette.
-		while(character() != -1 && !isWhitespace()
-				&& (Character.isDigit(character()) || character() == '-' || character() == '+' || character() == 'e'
-						|| character() == 'E' || character() == 'e' || character() == '.')) {
-			hadPoint |= character() == '.';
-			number.append((char) character());
+		StringBuilder result = new StringBuilder();
+
+		if(character() == '-') {
+			result.append((char) character());
 			read();
 		}
 
-		String numberString = number.toString();
+		if(character() == '0') {
+			result.append((char) character());
+			read();
+			if(isDigit()) {
+				throw new JsonParseException("Found superfluous leading zero");
+			}
+		}
+		else if(!isDigit()) {
+			throw new JsonParseException("Expected digits");
+		}
 
-		try {
-			if(hadPoint) {
-				double value = Double.parseDouble(numberString);
-				boolean fitsInt = value % 1 == 0;
-				if((float) value == value) {
-					if(fitsInt) {
-						return new JsonNumber((int) value);
-					}
-					return new JsonNumber((float) value);
-				}
+		while(character() != -1 && isDigit()) {
+			result.append((char) character());
+			read();
+		}
 
-				if(fitsInt) {
-					return new JsonNumber((long) value);
-				}
-				return new JsonNumber(value);
+		if(character() == '.') {
+			result.append('.');
+
+			read();
+			assertNoEOF("digits");
+
+			if(!isDigit()) {
+				throw new JsonParseException("Expected digits after decimal point");
 			}
 
-			long value = Long.parseLong(numberString);
-			if(value <= Integer.MAX_VALUE && value >= Integer.MIN_VALUE) {
-				return new JsonNumber((int) value);
+			while(character() != -1 && isDigit()) {
+				result.append((char) character());
+				read();
+			}
+		}
+
+		if(character() == 'e' || character() == 'E') {
+			result.append('E');
+
+			read();
+			assertNoEOF("digits");
+
+			if(character() == '+' || character() == '-') {
+				result.append((char) character());
+				read();
 			}
 
-			return new JsonNumber(value);
+			if(!(character() == '+' || character() == '-' || isDigit())) {
+				throw new JsonParseException("Expected exponent digits");
+			}
+
+			while(character() != -1 && isDigit()) {
+				result.append((char) character());
+				read();
+			}
 		}
-		catch(NumberFormatException error) {
-			throw new JsonParseException("Cannot parse number " + numberString);
-		}
+
+		return new JsonNumber(Double.parseDouble(result.toString()));
 	}
+
+//	static final long MIN_NEGATIVE = Long.MIN_VALUE / 10;
+//	static final long MIN_POSITIVE = -Long.MAX_VALUE / 10;
+//
+//	long readLong(boolean negative, boolean exponent, boolean decimal) throws IOException {
+//		long min = negative ? MIN_NEGATIVE : MIN_POSITIVE;
+//
+//		int digit;
+//
+//		long result = 0;
+//
+//		while(character() != -1 && (exponent || (character() != 'e' && character() != 'E'))
+//				&& (!decimal || character() != '.') && !isWhitespace()) {
+//			digit = character() - '0';
+//			if(digit < 0 || digit > 9) {
+//				throw new JsonParseException("Expected digit but got '" + (char) character() + "'");
+//			}
+//			result *= 10;
+//
+//			if(result < min + digit) {
+//				throw new JsonParseException("Number cannot be represented as long");
+//			}
+//
+//			result -= digit;
+//			read();
+//		}
+//
+//		if(!negative) {
+//			result = -result;
+//		}
+//
+//		return result;
+//	}
 
 	JsonBoolean readBoolean() throws IOException {
 		if(character() == 't') {

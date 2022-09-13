@@ -182,15 +182,15 @@ public abstract class JsonValue {
 	 * @return The Java number.
 	 * @throws JsonElementCastException If the value is not a number.
 	 */
-	public @NotNull Number getNumberValue() {
+	public @NotNull double getNumberValue() {
 		throw new JsonElementCastException("Not a JsonNumber: " + this + " (" + getPrimaryInterface() + ")");
 	}
 
-	public final @Nullable Number getNumberValueOrNull() {
+	public final @Nullable Double getNumberValueOrNull() {
 		return isNumber() ? getNumberValue() : null;
 	}
 
-	public final @NotNull Optional<Number> getNumberValueOpt() {
+	public final @NotNull Optional<Double> getNumberValueOpt() {
 		return Optional.ofNullable(getNumberValueOrNull());
 	}
 
@@ -254,8 +254,8 @@ public abstract class JsonValue {
 		return Optional.ofNullable(getFloatNumberValueOrNull());
 	}
 
-	public double getDoubleNumberValue() {
-		throw new JsonElementCastException("Not a JsonNumber: " + this + " (" + getPrimaryInterface() + ")");
+	public final double getDoubleNumberValue() {
+		return getNumberValue();
 	}
 
 	public final @Nullable Double getDoubleNumberValueOrNull() {
