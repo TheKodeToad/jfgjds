@@ -43,7 +43,7 @@ public abstract class JsonValue {
 			return JsonObject.ofCoerced((Map<Object, Object>) value);
 		}
 		else if(value instanceof List) {
-			return JsonArray.of((List<Object>) value);
+			return JsonArray.ofCoerced((List<Object>) value);
 		}
 		else if(value instanceof Object[]) {
 			return JsonArray.of((Object[]) value);
