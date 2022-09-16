@@ -1,3 +1,6 @@
+Moved to Codeberg @ https://codeberg.org/TheKodeToad/jfgjds.
+Reason: GitHub isn't the best and it looks "kinda neat" and a want to try it out.
+
 # JFGJDS
 A lightweight JSON parser in Java, with comparable speeds to GSON.
 
