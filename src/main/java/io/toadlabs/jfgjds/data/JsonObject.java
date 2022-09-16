@@ -119,7 +119,7 @@ public final class JsonObject extends JsonValue {
 	 * @param value The value.
 	 * @return <code>this</code>, for chaining.
 	 */
-	public @NotNull JsonObject put(@NotNull String key, @Nullable double value) {
+	public @NotNull JsonObject put(@NotNull String key, double value) {
 		return put(key, new JsonNumber(value));
 	}
 
@@ -129,7 +129,7 @@ public final class JsonObject extends JsonValue {
 	 * @param value The value.
 	 * @return <code>this</code>, for chaining.
 	 */
-	public @NotNull JsonObject put(@NotNull String key, @Nullable boolean value) {
+	public @NotNull JsonObject put(@NotNull String key, boolean value) {
 		return put(key, value ? JsonBoolean.TRUE : JsonBoolean.FALSE);
 	}
 
@@ -140,6 +140,16 @@ public final class JsonObject extends JsonValue {
 	 */
 	public @NotNull JsonObject putNull(@NotNull String key) {
 		return put(key, JsonNull.INSTANCE);
+	}
+
+	/**
+	 * Merges the object with another.
+	 * @param object The object.
+	 * @return <code>this</code>, for chaining.
+	 */
+	public @NotNull JsonObject putAll(@NotNull JsonObject object) {
+		map.putAll(Objects.requireNonNull(object).map);
+		return this;
 	}
 
 	/**
@@ -209,6 +219,15 @@ public final class JsonObject extends JsonValue {
 	 */
 	public boolean contains(@NotNull JsonValue value) {
 		return map.containsValue(value);
+	}
+
+	/**
+	 * Clears the object.
+	 * @return <code>this</code>, for chaining.
+	 */
+	public JsonObject clear() {
+		map.clear();
+		return this;
 	}
 
 	public @UnknownNullability JsonValue computeIfAbsent(@NotNull String key, @NotNull Function<String, JsonValue> mappingFunction) {

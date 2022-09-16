@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -47,7 +48,7 @@ public final class JsonArray extends JsonValue implements Iterable<JsonValue> {
 	}
 
 	@Override
-	public Iterator<JsonValue> iterator() {
+	public @NotNull Iterator<JsonValue> iterator() {
 		return list.iterator();
 	}
 
@@ -77,8 +78,7 @@ public final class JsonArray extends JsonValue implements Iterable<JsonValue> {
 	 * @return <code>this</code>, for chaining.
 	 */
 	public @NotNull JsonArray add(@NotNull String string) {
-		list.add(new JsonString(string));
-		return this;
+		return add(new JsonString(string));
 	}
 
 	/**
@@ -87,8 +87,7 @@ public final class JsonArray extends JsonValue implements Iterable<JsonValue> {
 	 * @return <code>this</code>, for chaining.
 	 */
 	public @NotNull JsonArray add(double number) {
-		list.add(new JsonNumber(number));
-		return this;
+		return add(new JsonNumber(number));
 	}
 
 	/**
@@ -97,8 +96,7 @@ public final class JsonArray extends JsonValue implements Iterable<JsonValue> {
 	 * @return <code>this</code>, for chaining.
 	 */
 	public @NotNull JsonArray add(boolean bool) {
-		list.add(bool ? JsonBoolean.TRUE : JsonBoolean.FALSE);
-		return this;
+		return add(bool ? JsonBoolean.TRUE : JsonBoolean.FALSE);
 	}
 
 	/**
@@ -106,7 +104,66 @@ public final class JsonArray extends JsonValue implements Iterable<JsonValue> {
 	 * @return <code>this</code>, for chaining.
 	 */
 	public @NotNull JsonArray addNull() {
-		list.add(JsonNull.INSTANCE);
+		return add(JsonNull.INSTANCE);
+	}
+
+	/**
+	 * Inserts a value in the array.
+	 * @param index The index.
+	 * @param value The value.
+	 * @return <code>this</code>, for chaining.
+	 */
+	public @NotNull JsonArray add(int index, @NotNull JsonValue value) {
+		list.add(index, value);
+		return this;
+	}
+
+	/**
+	 * Inserts a string in the array.
+	 * @param index The index.
+	 * @param string The string.
+	 * @return <code>this</code>, for chaining.
+	 */
+	public @NotNull JsonArray add(int index, @NotNull String string) {
+		return add(index, new JsonString(string));
+	}
+
+	/**
+	 * Inserts a number in the array.
+	 * @param index The index.
+	 * @param number The array.
+	 * @return <code>this</code>, for chaining.
+	 */
+	public @NotNull JsonArray add(int index, double number) {
+		return add(index, new JsonNumber(number));
+	}
+
+	/**
+	 * Inserts a boolean in the array.
+	 * @param index The index.
+	 * @param bool The boolean.
+	 * @return <code>this</code>, for chaining.
+	 */
+	public @NotNull JsonArray add(int index, boolean bool) {
+		return add(index, bool ? JsonBoolean.TRUE : JsonBoolean.FALSE);
+	}
+
+	/**
+	 * Inserts JSON null in the array.
+	 * @param index The index.
+	 * @return <code>this</code>, for chaining.
+	 */
+	public @NotNull JsonArray addNull(int index) {
+		return add(index, JsonNull.INSTANCE);
+	}
+
+	/**
+	 * Merges the array with another.
+	 * @param array The array.
+	 * @return <code>this</code>, for chaining.
+	 */
+	public @NotNull JsonArray addAll(@NotNull JsonArray array) {
+		list.addAll(Objects.requireNonNull(array).list);
 		return this;
 	}
 
@@ -185,6 +242,19 @@ public final class JsonArray extends JsonValue implements Iterable<JsonValue> {
 	 */
 	public boolean isEmpty() {
 		return list.isEmpty();
+	}
+
+	/**
+	 * Clears the array.
+	 * @return <code>this</code>, for chaining.
+	 */
+	public @NotNull JsonArray clear() {
+		list.clear();
+		return this;
+	}
+
+	public List<JsonValue> getList() {
+		return list;
 	}
 
 	@Override

@@ -204,8 +204,6 @@ final class Parser {
 			switch(character) {
 				case -1:
 					throw new JsonParseException("Expected '\"' but got EOF");
-				case '\n':
-					throw new JsonParseException("Expected '\"' but got a newline");
 				case 0x7F:
 					if(read() == '"') {
 						return result.toString();
