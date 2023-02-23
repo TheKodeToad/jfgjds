@@ -6,17 +6,14 @@ import io.toadlabs.jfgjds.exception.JsonElementCastException;
 
 public final class JsonBoolean extends JsonValue {
 
-	public static final JsonBoolean FALSE = new JsonBoolean(false);
-	public static final JsonBoolean TRUE = new JsonBoolean(true);
+	public static final JsonBoolean FALSE = new JsonBoolean();
+	public static final JsonBoolean TRUE = new JsonBoolean();
 
-	private final boolean value;
-
-	private JsonBoolean(boolean value) {
-		this.value = value;
+	private JsonBoolean() {
 	}
 
 	public boolean getValue() {
-		return value;
+		return isTrue();
 	}
 
 	@Override
@@ -36,12 +33,12 @@ public final class JsonBoolean extends JsonValue {
 
 	@Override
 	public boolean isFalse() {
-		return !value;
+		return this == FALSE;
 	}
 
 	@Override
 	public boolean isTrue() {
-		return value;
+		return this == TRUE;
 	}
 
 	@Override

@@ -11,15 +11,15 @@ import io.toadlabs.jfgjds.data.JsonObject;
  */
 public final class JsonGlobal {
 
-	public static final JsonNull JSON_NULL = JsonNull.INSTANCE;
-	public static final JsonBoolean JSON_FALSE = JsonBoolean.FALSE;
-	public static final JsonBoolean JSON_TRUE = JsonBoolean.TRUE;
+	public static final JsonNull J_NULL = JsonNull.INSTANCE;
+	public static final JsonBoolean J_FALSE = JsonBoolean.FALSE;
+	public static final JsonBoolean J_TRUE = JsonBoolean.TRUE;
 
-	public static JsonObject jsonObj(Object... values) {
+	public static JsonObject obj(Object... values) {
 		return JsonObject.of(values);
 	}
 
-	public static JsonArray jsonArray(Object... values) {
+	public static JsonArray arr(Object... values) {
 		return JsonArray.of(values);
 	}
 
