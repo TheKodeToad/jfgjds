@@ -16,6 +16,7 @@ public final class JsonString extends JsonValue {
 
 	/**
 	 * Gets the string value, guaranteed not to be null.
+	 *
 	 * @return The string value.
 	 */
 	public @NotNull String getValue() {
@@ -49,11 +50,11 @@ public final class JsonString extends JsonValue {
 
 	@Override
 	public boolean equals(Object obj) {
-		if(this == obj) {
+		if (this == obj) {
 			return true;
 		}
 
-		if(!(obj instanceof JsonString)) {
+		if (!(obj instanceof JsonString)) {
 			return false;
 		}
 

@@ -21,8 +21,9 @@ public final class JsonArray extends JsonValue implements Iterable<JsonValue> {
 	public static final Function<String, JsonValue> DEFAULT_COMPUTION = (ignored) -> new JsonArray();
 
 	/**
-	 * A helper method to create an array similar to how you would in other languages.
-	 * Values will be converted automatically.
+	 * A helper method to create an array similar to how you would in other
+	 * languages. Values will be converted automatically.
+	 *
 	 * @param values The array.
 	 * @return The object.
 	 */
@@ -39,10 +40,9 @@ public final class JsonArray extends JsonValue implements Iterable<JsonValue> {
 	}
 
 	public JsonArray(@Nullable List<@NotNull JsonValue> list) {
-		if(list == null) {
+		if (list == null) {
 			this.list = new ArrayList<>();
-		}
-		else {
+		} else {
 			this.list = new ArrayList<>(list);
 		}
 	}
@@ -54,6 +54,7 @@ public final class JsonArray extends JsonValue implements Iterable<JsonValue> {
 
 	/**
 	 * Gets the value at the specified index, otherwise throws.
+	 *
 	 * @param index The index.
 	 * @return The value.
 	 * @throws IndexOutOfBoundsException If the index is out of range.
@@ -64,6 +65,7 @@ public final class JsonArray extends JsonValue implements Iterable<JsonValue> {
 
 	/**
 	 * Adds a value to the end of the array.
+	 *
 	 * @param value The value.
 	 * @return <code>this</code>, for chaining.
 	 */
@@ -74,6 +76,7 @@ public final class JsonArray extends JsonValue implements Iterable<JsonValue> {
 
 	/**
 	 * Adds a string to the end of the array.
+	 *
 	 * @param string The string.
 	 * @return <code>this</code>, for chaining.
 	 */
@@ -83,6 +86,7 @@ public final class JsonArray extends JsonValue implements Iterable<JsonValue> {
 
 	/**
 	 * Adds a number to the end of the array.
+	 *
 	 * @param number The number.
 	 * @return <code>this</code>, for chaining.
 	 */
@@ -92,6 +96,7 @@ public final class JsonArray extends JsonValue implements Iterable<JsonValue> {
 
 	/**
 	 * Adds a boolean to the end of the array.
+	 *
 	 * @param bool The boolean.
 	 * @return <code>this</code>, for chaining.
 	 */
@@ -101,6 +106,7 @@ public final class JsonArray extends JsonValue implements Iterable<JsonValue> {
 
 	/**
 	 * Adds JSON null to the end of the array.
+	 *
 	 * @return <code>this</code>, for chaining.
 	 */
 	public @NotNull JsonArray addNull() {
@@ -109,6 +115,7 @@ public final class JsonArray extends JsonValue implements Iterable<JsonValue> {
 
 	/**
 	 * Inserts a value in the array.
+	 *
 	 * @param index The index.
 	 * @param value The value.
 	 * @return <code>this</code>, for chaining.
@@ -120,7 +127,8 @@ public final class JsonArray extends JsonValue implements Iterable<JsonValue> {
 
 	/**
 	 * Inserts a string in the array.
-	 * @param index The index.
+	 *
+	 * @param index  The index.
 	 * @param string The string.
 	 * @return <code>this</code>, for chaining.
 	 */
@@ -130,7 +138,8 @@ public final class JsonArray extends JsonValue implements Iterable<JsonValue> {
 
 	/**
 	 * Inserts a number in the array.
-	 * @param index The index.
+	 *
+	 * @param index  The index.
 	 * @param number The array.
 	 * @return <code>this</code>, for chaining.
 	 */
@@ -140,8 +149,9 @@ public final class JsonArray extends JsonValue implements Iterable<JsonValue> {
 
 	/**
 	 * Inserts a boolean in the array.
+	 *
 	 * @param index The index.
-	 * @param bool The boolean.
+	 * @param bool  The boolean.
 	 * @return <code>this</code>, for chaining.
 	 */
 	public @NotNull JsonArray add(int index, boolean bool) {
@@ -150,6 +160,7 @@ public final class JsonArray extends JsonValue implements Iterable<JsonValue> {
 
 	/**
 	 * Inserts JSON null in the array.
+	 *
 	 * @param index The index.
 	 * @return <code>this</code>, for chaining.
 	 */
@@ -159,6 +170,7 @@ public final class JsonArray extends JsonValue implements Iterable<JsonValue> {
 
 	/**
 	 * Merges the array with another.
+	 *
 	 * @param array The array.
 	 * @return <code>this</code>, for chaining.
 	 */
@@ -169,6 +181,7 @@ public final class JsonArray extends JsonValue implements Iterable<JsonValue> {
 
 	/**
 	 * Removes a value by its index.
+	 *
 	 * @param index The index.
 	 * @return <code>this</code>, for chaining.
 	 * @throws IndexOutOfBoundsException If the index is out of range.
@@ -180,6 +193,7 @@ public final class JsonArray extends JsonValue implements Iterable<JsonValue> {
 
 	/**
 	 * Removes a value from the array.
+	 *
 	 * @param value The value.
 	 * @return <code>this</code>, for chaining.
 	 * @throws IndexOutOfBoundsException If the index is out of range.
@@ -191,6 +205,7 @@ public final class JsonArray extends JsonValue implements Iterable<JsonValue> {
 
 	/**
 	 * Removes a value from the array.
+	 *
 	 * @param value The value.
 	 * @return <code>this</code>, for chaining.
 	 * @throws IndexOutOfBoundsException If the index is out of range.
@@ -201,6 +216,7 @@ public final class JsonArray extends JsonValue implements Iterable<JsonValue> {
 
 	/**
 	 * Removes a value from the array.
+	 *
 	 * @param value The value.
 	 * @return <code>this</code>, for chaining.
 	 * @throws IndexOutOfBoundsException If the index is out of range.
@@ -211,6 +227,7 @@ public final class JsonArray extends JsonValue implements Iterable<JsonValue> {
 
 	/**
 	 * Removes a value from the array.
+	 *
 	 * @param value The value.
 	 * @return <code>this</code>, for chaining.
 	 * @throws IndexOutOfBoundsException If the index is out of range.
@@ -221,6 +238,7 @@ public final class JsonArray extends JsonValue implements Iterable<JsonValue> {
 
 	/**
 	 * Removes the first null in the array.
+	 *
 	 * @return <code>this</code>, for chaining.
 	 * @throws IndexOutOfBoundsException If the index is out of range.
 	 */
@@ -230,6 +248,7 @@ public final class JsonArray extends JsonValue implements Iterable<JsonValue> {
 
 	/**
 	 * Gets the size of the array.
+	 *
 	 * @return The size.
 	 */
 	public int size() {
@@ -238,6 +257,7 @@ public final class JsonArray extends JsonValue implements Iterable<JsonValue> {
 
 	/**
 	 * Gets whether the array is empty.
+	 *
 	 * @return <code>true</code> if the size is <code>0</code>.
 	 */
 	public boolean isEmpty() {
@@ -246,6 +266,7 @@ public final class JsonArray extends JsonValue implements Iterable<JsonValue> {
 
 	/**
 	 * Clears the array.
+	 *
 	 * @return <code>this</code>, for chaining.
 	 */
 	public @NotNull JsonArray clear() {
@@ -291,11 +312,11 @@ public final class JsonArray extends JsonValue implements Iterable<JsonValue> {
 
 	@Override
 	public boolean equals(Object obj) {
-		if(this == obj) {
+		if (this == obj) {
 			return true;
 		}
 
-		if(!(obj instanceof JsonArray)) {
+		if (!(obj instanceof JsonArray)) {
 			return false;
 		}
 

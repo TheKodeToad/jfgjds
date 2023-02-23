@@ -22,11 +22,13 @@ public final class JsonSerializer {
 		throw new UnsupportedOperationException("Object initialization");
 	}
 
-	public static void write(@NotNull JsonValue value, @NotNull OutputStream out, @NotNull String charset) throws IOException {
+	public static void write(@NotNull JsonValue value, @NotNull OutputStream out, @NotNull String charset)
+			throws IOException {
 		out.write(toString(value).getBytes(Charset.forName(charset)));
 	}
 
-	public static void write(@NotNull JsonValue value, @NotNull OutputStream out, @NotNull Charset charset) throws IOException {
+	public static void write(@NotNull JsonValue value, @NotNull OutputStream out, @NotNull Charset charset)
+			throws IOException {
 		out.write(toString(value).getBytes(Objects.requireNonNull(charset)));
 	}
 
@@ -42,22 +44,17 @@ public final class JsonSerializer {
 	}
 
 	private static void write(JsonValue value, StringBuilder out) {
-		if(value.isObject()) {
+		if (value.isObject()) {
 			write(value.asObject(), out);
-		}
-		else if(value.isArray()) {
+		} else if (value.isArray()) {
 			write(value.asArray(), out);
-		}
-		else if(value.isString()) {
+		} else if (value.isString()) {
 			write(value.asString(), out);
-		}
-		else if(value.isNumber()) {
+		} else if (value.isNumber()) {
 			write(value.asNumber(), out);
-		}
-		else if(value.isBoolean()) {
+		} else if (value.isBoolean()) {
 			write(value.asBoolean(), out);
-		}
-		else if(value.isNull()) {
+		} else if (value.isNull()) {
 			writeNull(out);
 		}
 	}
@@ -65,8 +62,8 @@ public final class JsonSerializer {
 	private static void write(JsonObject obj, StringBuilder out) {
 		out.append('{');
 		boolean comma = false;
-		for(Map.Entry<String, JsonValue> entry : obj.entries()) {
-			if(comma) {
+		for (Map.Entry<String, JsonValue> entry : obj.entries()) {
+			if (comma) {
 				out.append(',');
 			}
 			write(entry.getKey(), out);
@@ -80,8 +77,8 @@ public final class JsonSerializer {
 	private static void write(JsonArray array, StringBuilder out) {
 		out.append('[');
 		boolean comma = false;
-		for(JsonValue entry : array) {
-			if(comma) {
+		for (JsonValue entry : array) {
+			if (comma) {
 				out.append(',');
 			}
 			write(entry, out);
@@ -97,27 +94,27 @@ public final class JsonSerializer {
 	private static void write(String str, StringBuilder out) {
 		out.append('"');
 
-		for(char character : str.toCharArray()) {
-			switch(character) {
-				case '\\':
-				case '"':
-					out.append('\\');
-					break;
-				case '\b':
-					out.append("\\b");
-					continue;
-				case '\f':
-					out.append("\\f");
-					continue;
-				case '\n':
-					out.append("\\n");
-					continue;
-				case '\r':
-					out.append("\\r");
-					continue;
-				case '\t':
-					out.append("\\t");
-					continue;
+		for (char character : str.toCharArray()) {
+			switch (character) {
+			case '\\':
+			case '"':
+				out.append('\\');
+				break;
+			case '\b':
+				out.append("\\b");
+				continue;
+			case '\f':
+				out.append("\\f");
+				continue;
+			case '\n':
+				out.append("\\n");
+				continue;
+			case '\r':
+				out.append("\\r");
+				continue;
+			case '\t':
+				out.append("\\t");
+				continue;
 			}
 			out.append(character);
 		}
@@ -128,15 +125,14 @@ public final class JsonSerializer {
 	private static void write(JsonNumber number, StringBuilder out) {
 		double value = number.getValue();
 
-		if(Double.isInfinite(value)) {
-			if(value == Double.NEGATIVE_INFINITY) {
+		if (Double.isInfinite(value)) {
+			if (value == Double.NEGATIVE_INFINITY) {
 				out.append('-');
 			}
 			// just to be sure that it's defintely Infinity
 			out.append("1E99999");
 			return;
-		}
-		else if(value != value) {
+		} else if (value != value) {
 			// cannot be represented
 			writeNull(out);
 			return;

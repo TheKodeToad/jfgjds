@@ -22,13 +22,14 @@ public final class JsonObject extends JsonValue {
 	public static final Function<String, JsonValue> DEFAULT_COMPUTION = (ignored) -> new JsonObject();
 
 	/**
-	 * A helper method to create an object similar to how you would in other languages.
-	 * Values will be converted automatically.
+	 * A helper method to create an object similar to how you would in other
+	 * languages. Values will be converted automatically.
+	 *
 	 * @param values An array of key value pairs.
 	 * @return The object.
 	 */
 	public static @NotNull JsonObject of(Object... values) {
-		if(values.length % 2 != 0) {
+		if (values.length % 2 != 0) {
 			throw new IllegalArgumentException("Uneven argument length");
 		}
 
@@ -36,10 +37,10 @@ public final class JsonObject extends JsonValue {
 		Object key = null;
 		Object item;
 
-		for(int index = 0; index < values.length; index++) {
+		for (int index = 0; index < values.length; index++) {
 			item = values[index];
 
-			if(index % 2 == 0) {
+			if (index % 2 == 0) {
 				key = values[index];
 				continue;
 			}
@@ -66,16 +67,16 @@ public final class JsonObject extends JsonValue {
 	}
 
 	public JsonObject(@Nullable Map<String, JsonValue> map) {
-		if(map == null) {
+		if (map == null) {
 			this.map = new HashMap<>();
-		}
-		else {
+		} else {
 			this.map = new HashMap<>(map);
 		}
 	}
 
 	/**
 	 * Gets a value on the object - nullable version.
+	 *
 	 * @param key The key.
 	 * @return The value, or <code>null</code>.
 	 */
@@ -85,6 +86,7 @@ public final class JsonObject extends JsonValue {
 
 	/**
 	 * Gets a value on the object - optional version.
+	 *
 	 * @param key The key.
 	 * @return An optional value.
 	 */
@@ -94,7 +96,8 @@ public final class JsonObject extends JsonValue {
 
 	/**
 	 * Sets a value in the object.
-	 * @param key The key.
+	 *
+	 * @param key   The key.
 	 * @param value The value.
 	 * @return <code>this</code>, for chaining.
 	 */
@@ -105,7 +108,8 @@ public final class JsonObject extends JsonValue {
 
 	/**
 	 * Sets a string in the object.
-	 * @param key The key.
+	 *
+	 * @param key   The key.
 	 * @param value The string.
 	 * @return <code>this</code>, for chaining.
 	 */
@@ -115,7 +119,8 @@ public final class JsonObject extends JsonValue {
 
 	/**
 	 * Sets a number in the object.
-	 * @param key The key.
+	 *
+	 * @param key   The key.
 	 * @param value The value.
 	 * @return <code>this</code>, for chaining.
 	 */
@@ -125,7 +130,8 @@ public final class JsonObject extends JsonValue {
 
 	/**
 	 * Sets a boolean in the object.
-	 * @param key The key.
+	 *
+	 * @param key   The key.
 	 * @param value The value.
 	 * @return <code>this</code>, for chaining.
 	 */
@@ -135,6 +141,7 @@ public final class JsonObject extends JsonValue {
 
 	/**
 	 * Sets JSON null in the object.
+	 *
 	 * @param key The key.
 	 * @return <code>this</code>, for chaining.
 	 */
@@ -144,6 +151,7 @@ public final class JsonObject extends JsonValue {
 
 	/**
 	 * Merges the object with another.
+	 *
 	 * @param object The object.
 	 * @return <code>this</code>, for chaining.
 	 */
@@ -154,6 +162,7 @@ public final class JsonObject extends JsonValue {
 
 	/**
 	 * Removes a value by its key.
+	 *
 	 * @param key The key.
 	 * @return <code>this</code>, for chaining.
 	 */
@@ -164,7 +173,8 @@ public final class JsonObject extends JsonValue {
 
 	/**
 	 * Removes a key from the map, only if it matches the specified value.
-	 * @param key The key.
+	 *
+	 * @param key   The key.
 	 * @param value The value.
 	 * @return <code>this</code>, for chaining.
 	 */
@@ -175,7 +185,8 @@ public final class JsonObject extends JsonValue {
 
 	/**
 	 * Removes a key from the map, only if it matches the specified value.
-	 * @param key The key.
+	 *
+	 * @param key   The key.
 	 * @param value The value.
 	 * @return <code>this</code>, for chaining.
 	 */
@@ -185,7 +196,8 @@ public final class JsonObject extends JsonValue {
 
 	/**
 	 * Removes a key from the map, only if it matches the specified value.
-	 * @param key The key.
+	 *
+	 * @param key   The key.
 	 * @param value The value.
 	 * @return <code>this</code>, for chaining.
 	 */
@@ -195,7 +207,8 @@ public final class JsonObject extends JsonValue {
 
 	/**
 	 * Removes a key from the map, only if it matches the specified value.
-	 * @param key The key.
+	 *
+	 * @param key   The key.
 	 * @param value The value.
 	 * @return <code>this</code>, for chaining.
 	 */
@@ -205,6 +218,7 @@ public final class JsonObject extends JsonValue {
 
 	/**
 	 * Gets whether the object contains a mapping from the specified key.
+	 *
 	 * @param key The key.
 	 * @return <code>true</code> if the key is present.
 	 */
@@ -214,6 +228,7 @@ public final class JsonObject extends JsonValue {
 
 	/**
 	 * Gets whether the object contains the specified value.
+	 *
 	 * @param value The value.
 	 * @return <code>true</code> if the value is present.
 	 */
@@ -223,6 +238,7 @@ public final class JsonObject extends JsonValue {
 
 	/**
 	 * Clears the object.
+	 *
 	 * @return <code>this</code>, for chaining.
 	 */
 	public JsonObject clear() {
@@ -230,15 +246,18 @@ public final class JsonObject extends JsonValue {
 		return this;
 	}
 
-	public @UnknownNullability JsonValue computeIfAbsent(@NotNull String key, @NotNull Function<String, JsonValue> mappingFunction) {
+	public @UnknownNullability JsonValue computeIfAbsent(@NotNull String key,
+			@NotNull Function<String, JsonValue> mappingFunction) {
 		return map.computeIfAbsent(key, mappingFunction);
 	}
 
-	public @UnknownNullability JsonValue computeIfPresent(@NotNull String key, @NotNull BiFunction<? super String, ? super JsonValue, ? extends JsonValue> mappingFunction) {
+	public @UnknownNullability JsonValue computeIfPresent(@NotNull String key,
+			@NotNull BiFunction<? super String, ? super JsonValue, ? extends JsonValue> mappingFunction) {
 		return map.computeIfPresent(key, mappingFunction);
 	}
 
-	public @UnknownNullability JsonValue compute(@NotNull String key, @NotNull BiFunction<? super String, ? super JsonValue, ? extends JsonValue> remappingFunction) {
+	public @UnknownNullability JsonValue compute(@NotNull String key,
+			@NotNull BiFunction<? super String, ? super JsonValue, ? extends JsonValue> remappingFunction) {
 		return map.compute(key, remappingFunction);
 	}
 
@@ -284,11 +303,11 @@ public final class JsonObject extends JsonValue {
 
 	@Override
 	public boolean equals(Object obj) {
-		if(this == obj) {
+		if (this == obj) {
 			return true;
 		}
 
-		if(!(obj instanceof JsonObject)) {
+		if (!(obj instanceof JsonObject)) {
 			return false;
 		}
 

@@ -14,6 +14,7 @@ import io.toadlabs.jfgjds.data.JsonValue;
 import io.toadlabs.jfgjds.exception.JsonParseException;
 
 final class Parser {
+
 	Reader in;
 	int pos;
 	int length;
@@ -28,7 +29,7 @@ final class Parser {
 	}
 
 	int character() {
-		if(length == -1) {
+		if (length == -1) {
 			return -1;
 		}
 
@@ -36,11 +37,11 @@ final class Parser {
 	}
 
 	int read() throws IOException {
-		if(length == -1) {
+		if (length == -1) {
 			return -1;
 		}
 
-		if(buffer == null || pos++ == length - 1) {
+		if (buffer == null || pos++ == length - 1) {
 			pos = 0;
 			buffer = new char[8192];
 			length = in.read(buffer);
@@ -50,19 +51,20 @@ final class Parser {
 	}
 
 	void assertCharacter(char character) throws JsonParseException {
-		if(character() != character) {
-			throw new JsonParseException("Expected '" + character + "' but got " + (character() != -1 ? ("'" + (char) character() + "'") : "EOF"));
+		if (character() != character) {
+			throw new JsonParseException("Expected '" + character + "' but got "
+					+ (character() != -1 ? ("'" + (char) character() + "'") : "EOF"));
 		}
 	}
 
 	void assertNoEOF(String expected) throws JsonParseException {
-		if(character() == -1) {
+		if (character() == -1) {
 			throw new JsonParseException("Expected " + expected + " but got EOF");
 		}
 	}
 
 	void skipWhitespace() throws IOException {
-		while(isWhitespace()) {
+		while (isWhitespace()) {
 			read();
 		}
 	}
@@ -74,11 +76,11 @@ final class Parser {
 	JsonValue readSingleValue() throws IOException {
 		skipWhitespace();
 		JsonValue result = readValue();
-		if(!(result instanceof JsonNumber)) {
+		if (!(result instanceof JsonNumber)) {
 			read();
 		}
 		skipWhitespace();
-		if(character() != -1) {
+		if (character() != -1) {
 			throw new JsonParseException("Found trailing non-whitespace characters");
 		}
 		return result;
@@ -89,30 +91,30 @@ final class Parser {
 
 		int character = character();
 
-		switch(character) {
-			case '{':
-				return readObject();
-			case '[':
-				return readArray();
-			case '"':
-				return readString();
-			case 't':
-			case 'f':
-				// probably boolean
-				JsonBoolean bool = readBoolean();
-				if(bool != null) {
-					return bool;
-				}
-				break;
-			case 'n':
-				// probably null
-				if(readNull()) {
-					return JsonNull.INSTANCE;
-				}
-				break;
+		switch (character) {
+		case '{':
+			return readObject();
+		case '[':
+			return readArray();
+		case '"':
+			return readString();
+		case 't':
+		case 'f':
+			// probably boolean
+			JsonBoolean bool = readBoolean();
+			if (bool != null) {
+				return bool;
+			}
+			break;
+		case 'n':
+			// probably null
+			if (readNull()) {
+				return JsonNull.INSTANCE;
+			}
+			break;
 		}
 
-		if(character == '-' || isDigit()) {
+		if (character == '-' || isDigit()) {
 			// probably a number
 			return readNumber();
 		}
@@ -128,8 +130,8 @@ final class Parser {
 		read();
 		skipWhitespace();
 
-		while(character() != '}') {
-			if(comma) {
+		while (character() != '}') {
+			if (comma) {
 				assertCharacter(',');
 				read();
 				skipWhitespace();
@@ -145,7 +147,7 @@ final class Parser {
 			JsonValue value = readValue();
 			obj.put(key, value);
 
-			if(!(value instanceof JsonNumber)) {
+			if (!(value instanceof JsonNumber)) {
 				read();
 			}
 
@@ -164,8 +166,8 @@ final class Parser {
 		read();
 		skipWhitespace();
 
-		while(character() != ']') {
-			if(comma) {
+		while (character() != ']') {
+			if (comma) {
 				assertCharacter(',');
 				read();
 				skipWhitespace();
@@ -174,7 +176,7 @@ final class Parser {
 			JsonValue value = readValue();
 			array.add(value);
 
-			if(!(value instanceof JsonNumber)) {
+			if (!(value instanceof JsonNumber)) {
 				read();
 			}
 
@@ -194,77 +196,75 @@ final class Parser {
 
 		StringBuilder result = new StringBuilder();
 
-		while(read() != '"') {
+		while (read() != '"') {
 			int character = character();
 
-			if(character >= '\u0000' && character <= '\u001F') {
+			if (character >= '\u0000' && character <= '\u001F') {
 				throw new JsonParseException("Found unescaped control character within string");
 			}
 
-			switch(character) {
+			switch (character) {
+			case -1:
+				throw new JsonParseException("Expected '\"' but got EOF");
+			case 0x7F:
+				if (read() == '"') {
+					return result.toString();
+				}
+				continue;
+			case '\\':
+				int seq = read();
+
+				switch (seq) {
 				case -1:
-					throw new JsonParseException("Expected '\"' but got EOF");
-				case 0x7F:
-					if(read() == '"') {
-						return result.toString();
-					}
-					continue;
+					throw new JsonParseException("Expected an escape sequence but got EOF");
 				case '\\':
-					int seq = read();
-
-					switch(seq) {
-						case -1:
-							throw new JsonParseException("Expected an escape sequence but got EOF");
-						case '\\':
-							break;
-						case '/':
-						case '\"':
-							character = seq;
-							break;
-						case 'b':
-							character = '\b';
-							break;
-						case 'f':
-							character = '\f';
-							break;
-						case 'n':
-							character = '\n';
-							break;
-						case 'r':
-							character = '\r';
-							break;
-						case 't':
-							character = '\t';
-							break;
-						case 'u':
-							// char array to allow allocation in advance.
-							char[] digits = new char[4];
-
-							for(int index = 0; index < digits.length; index++) {
-								character = read();
-								if(index == 0 && character() == '-') {
-									throw new JsonParseException("Hex sequence may not be negative");
-								}
-								else if(character() == -1) {
-									throw new JsonParseException("Expected a hex sequence but got EOF");
-								}
-								digits[index] = (char) character;
-							}
-
-							String digitsString = new String(digits);
-
-							try {
-								character = Integer.parseInt(digitsString, 16);
-							}
-							catch(NumberFormatException error) {
-								throw new JsonParseException("Could not parse hex sequence \"" + digitsString + "\"");
-							}
-
-							break;
-						default:
-							throw new JsonParseException("Invalid escape sequence: \\" + (char) seq);
-					}
 					break;
+				case '/':
+				case '\"':
+					character = seq;
+					break;
+				case 'b':
+					character = '\b';
+					break;
+				case 'f':
+					character = '\f';
+					break;
+				case 'n':
+					character = '\n';
+					break;
+				case 'r':
+					character = '\r';
+					break;
+				case 't':
+					character = '\t';
+					break;
+				case 'u':
+					// char array to allow allocation in advance.
+					char[] digits = new char[4];
+
+					for (int index = 0; index < digits.length; index++) {
+						character = read();
+						if (index == 0 && character() == '-') {
+							throw new JsonParseException("Hex sequence may not be negative");
+						} else if (character() == -1) {
+							throw new JsonParseException("Expected a hex sequence but got EOF");
+						}
+						digits[index] = (char) character;
+					}
+
+					String digitsString = new String(digits);
+
+					try {
+						character = Integer.parseInt(digitsString, 16);
+					} catch (NumberFormatException error) {
+						throw new JsonParseException("Could not parse hex sequence \"" + digitsString + "\"");
+					}
+
+					break;
+				default:
+					throw new JsonParseException("Invalid escape sequence: \\" + (char) seq);
+				}
+				break;
 			}
 
 			result.append((char) character);
@@ -280,59 +280,58 @@ final class Parser {
 	JsonNumber readNumber() throws IOException {
 		StringBuilder result = new StringBuilder();
 
-		if(character() == '-') {
+		if (character() == '-') {
 			result.append((char) character());
 			read();
 		}
 
-		if(character() == '0') {
+		if (character() == '0') {
 			result.append((char) character());
 			read();
-			if(isDigit()) {
+			if (isDigit()) {
 				throw new JsonParseException("Found superfluous leading zero");
 			}
-		}
-		else if(!isDigit()) {
+		} else if (!isDigit()) {
 			throw new JsonParseException("Expected digits");
 		}
 
-		while(character() != -1 && isDigit()) {
+		while (character() != -1 && isDigit()) {
 			result.append((char) character());
 			read();
 		}
 
-		if(character() == '.') {
+		if (character() == '.') {
 			result.append('.');
 
 			read();
 			assertNoEOF("digits");
 
-			if(!isDigit()) {
+			if (!isDigit()) {
 				throw new JsonParseException("Expected digits after decimal point");
 			}
 
-			while(character() != -1 && isDigit()) {
+			while (character() != -1 && isDigit()) {
 				result.append((char) character());
 				read();
 			}
 		}
 
-		if(character() == 'e' || character() == 'E') {
+		if (character() == 'e' || character() == 'E') {
 			result.append('E');
 
 			read();
 			assertNoEOF("digits");
 
-			if(character() == '+' || character() == '-') {
+			if (character() == '+' || character() == '-') {
 				result.append((char) character());
 				read();
 			}
 
-			if(!(character() == '+' || character() == '-' || isDigit())) {
+			if (!(character() == '+' || character() == '-' || isDigit())) {
 				throw new JsonParseException("Expected exponent digits");
 			}
 
-			while(character() != -1 && isDigit()) {
+			while (character() != -1 && isDigit()) {
 				result.append((char) character());
 				read();
 			}
@@ -342,20 +341,18 @@ final class Parser {
 
 		try {
 			return new JsonNumber(Double.parseDouble(resultStr));
-		}
-		catch(NumberFormatException error) {
+		} catch (NumberFormatException error) {
 			throw new JsonParseException("Failed to parse number '" + resultStr + "'");
 		}
 	}
 
 	JsonBoolean readBoolean() throws IOException {
-		if(character() == 't') {
-			if(read() == 'r' && read() == 'u' && read() == 'e') {
+		if (character() == 't') {
+			if (read() == 'r' && read() == 'u' && read() == 'e') {
 				return JsonBoolean.TRUE;
 			}
-		}
-		else if(character() == 'f') {
-			if(read() == 'a' && read() == 'l' && read() == 's' && read() == 'e') {
+		} else if (character() == 'f') {
+			if (read() == 'a' && read() == 'l' && read() == 's' && read() == 'e') {
 				return JsonBoolean.FALSE;
 			}
 		}

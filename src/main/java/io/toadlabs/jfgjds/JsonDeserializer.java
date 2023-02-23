@@ -33,11 +33,13 @@ public final class JsonDeserializer {
 		return PARSER.get().setup(Objects.requireNonNull(in)).readSingleValue();
 	}
 
-	public static @NotNull JsonValue read(@NotNull InputStream in, @NotNull String charset) throws JsonParseException, IOException {
+	public static @NotNull JsonValue read(@NotNull InputStream in, @NotNull String charset)
+			throws JsonParseException, IOException {
 		return read(in, Charset.forName(charset));
 	}
 
-	public static @NotNull JsonValue read(@NotNull InputStream in, @NotNull Charset charset) throws JsonParseException, IOException {
+	public static @NotNull JsonValue read(@NotNull InputStream in, @NotNull Charset charset)
+			throws JsonParseException, IOException {
 		return read(new InputStreamReader(Objects.requireNonNull(in), Objects.requireNonNull(charset)));
 	}
 

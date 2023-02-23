@@ -92,11 +92,11 @@ public final class JsonNumber extends JsonValue {
 
 	@Override
 	public boolean equals(Object obj) {
-		if(this == obj) {
+		if (this == obj) {
 			return true;
 		}
 
-		if(!(obj instanceof JsonNumber)) {
+		if (!(obj instanceof JsonNumber)) {
 			return false;
 		}
 

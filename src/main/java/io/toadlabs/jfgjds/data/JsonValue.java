@@ -13,49 +13,41 @@ import io.toadlabs.jfgjds.exception.JsonElementCastException;
 /**
  * Represents one of the following:
  * <ul>
- *   <li>JSON object</li>
- *   <li>JSON array</li>
- *   <li>JSON string</li>
- *   <li>JSON number</li>
- *   <li>JSON boolean</li>
- *   <li>JSON null</li>
+ * <li>JSON object</li>
+ * <li>JSON array</li>
+ * <li>JSON string</li>
+ * <li>JSON number</li>
+ * <li>JSON boolean</li>
+ * <li>JSON null</li>
  * </ul>
  */
 public abstract class JsonValue {
 
 	public static @NotNull JsonValue coerce(Object value) {
-		if(value == null) {
+		if (value == null) {
 			return JsonNull.INSTANCE;
-		}
-		else if(value instanceof JsonValue) {
+		} else if (value instanceof JsonValue) {
 			return (JsonValue) value;
-		}
-		else if(value instanceof String) {
+		} else if (value instanceof String) {
 			return new JsonString((String) value);
-		}
-		else if(value instanceof Number) {
+		} else if (value instanceof Number) {
 			return new JsonNumber(((Number) value).doubleValue());
-		}
-		else if(value instanceof Boolean) {
+		} else if (value instanceof Boolean) {
 			return (boolean) value ? JsonBoolean.TRUE : JsonBoolean.FALSE;
-		}
-		else if(value instanceof Map) {
+		} else if (value instanceof Map) {
 			return JsonObject.ofCoerced((Map<Object, Object>) value);
-		}
-		else if(value instanceof List) {
+		} else if (value instanceof List) {
 			return JsonArray.ofCoerced((List<Object>) value);
-		}
-		else if(value instanceof Object[]) {
+		} else if (value instanceof Object[]) {
 			return JsonArray.of((Object[]) value);
-		}
-		else {
+		} else {
 			return new JsonString(value.toString());
 		}
 	}
 
-
 	/**
 	 * Gets whether the JSON value is an object.
+	 *
 	 * @return <code>true</code> if this is a JSON object.
 	 */
 	public boolean isObject() {
@@ -64,6 +56,7 @@ public abstract class JsonValue {
 
 	/**
 	 * Gets the JSON value as an object, otherwise throws.
+	 *
 	 * @return The JSON object.
 	 * @throws JsonElementCastException If the value is not an object.
 	 */
@@ -73,6 +66,7 @@ public abstract class JsonValue {
 
 	/**
 	 * Gets the JSON value as an object - nullable version.
+	 *
 	 * @return The JSON object, or <code>null</code>.
 	 */
 	public final @Nullable JsonObject asObjectOrNull() {
@@ -81,6 +75,7 @@ public abstract class JsonValue {
 
 	/**
 	 * Gets the JSON value as an object - optional version.
+	 *
 	 * @return An optional JSON object.
 	 */
 	public final @NotNull Optional<JsonObject> asObjectOpt() {
@@ -89,6 +84,7 @@ public abstract class JsonValue {
 
 	/**
 	 * Gets whether the JSON value is an array.
+	 *
 	 * @return <code>true</code> if this is a JSON array.
 	 */
 	public boolean isArray() {
@@ -97,6 +93,7 @@ public abstract class JsonValue {
 
 	/**
 	 * Gets the JSON value as an array, otherwise throws.
+	 *
 	 * @return The JSON array.
 	 * @throws JsonElementCastException If the value is not an array.
 	 */
@@ -106,6 +103,7 @@ public abstract class JsonValue {
 
 	/**
 	 * Gets the JSON value as an array - nullable version.
+	 *
 	 * @return The JSON array, or <code>null</code>.
 	 */
 	public final @Nullable JsonArray asArrayOrNull() {
@@ -114,6 +112,7 @@ public abstract class JsonValue {
 
 	/**
 	 * Gets the JSON value as an array - optional version.
+	 *
 	 * @return An optional JSON array.
 	 */
 	public final @NotNull Optional<JsonArray> asArrayOpt() {
@@ -122,6 +121,7 @@ public abstract class JsonValue {
 
 	/**
 	 * Gets whether the JSON value is a string.
+	 *
 	 * @return <code>true</code> if this is a JSON string.
 	 */
 	public boolean isString() {
@@ -130,6 +130,7 @@ public abstract class JsonValue {
 
 	/**
 	 * Gets the JSON value as a string, otherwise throws.
+	 *
 	 * @return The JSON string.
 	 * @throws JsonElementCastException If the value is not an string.
 	 */
@@ -139,6 +140,7 @@ public abstract class JsonValue {
 
 	/**
 	 * Gets the JSON value as a string - nullable version.
+	 *
 	 * @return The JSON string, or <code>null</code>.
 	 */
 	public final @Nullable JsonString asStringOrNull() {
@@ -147,6 +149,7 @@ public abstract class JsonValue {
 
 	/**
 	 * Gets the JSON value as a string - optional version.
+	 *
 	 * @return An optional JSON string.
 	 */
 	public final @NotNull Optional<JsonString> asStringOpt() {
@@ -155,6 +158,7 @@ public abstract class JsonValue {
 
 	/**
 	 * Gets the Java value of the JSON string, otherwise throws.
+	 *
 	 * @return The Java string.
 	 * @throws JsonElementCastException If the value is not a string.
 	 */
@@ -164,6 +168,7 @@ public abstract class JsonValue {
 
 	/**
 	 * Gets the Java value of the JSON string - nullable version.
+	 *
 	 * @return The Java string, or <code>null</code>.
 	 */
 	public final @Nullable String getStringValueOrNull() {
@@ -172,6 +177,7 @@ public abstract class JsonValue {
 
 	/**
 	 * Gets the Java value of the JSON string - optional version.
+	 *
 	 * @return An optional Java string.
 	 */
 	public final @NotNull Optional<String> getStringValueOpt() {
@@ -180,6 +186,7 @@ public abstract class JsonValue {
 
 	/**
 	 * Gets whether the JSON value is a number.
+	 *
 	 * @return <code>true</code> if this is a JSON number.
 	 */
 	public boolean isNumber() {
@@ -188,6 +195,7 @@ public abstract class JsonValue {
 
 	/**
 	 * Gets the JSON value as a number, otherwise throws.
+	 *
 	 * @return The JSON number.
 	 * @throws JsonElementCastException If the value is not an number.
 	 */
@@ -197,6 +205,7 @@ public abstract class JsonValue {
 
 	/**
 	 * Gets the JSON value as a number - nullable version.
+	 *
 	 * @return The JSON number.
 	 */
 	public final @Nullable JsonNumber asNumberOrNull() {
@@ -205,6 +214,7 @@ public abstract class JsonValue {
 
 	/**
 	 * Gets the JSON value as a number - optional version.
+	 *
 	 * @return An optional JSON number.
 	 */
 	public final @NotNull Optional<JsonNumber> asNumberOpt() {
@@ -213,6 +223,7 @@ public abstract class JsonValue {
 
 	/**
 	 * Gets the Java value of the JSON number, otherwise throws.
+	 *
 	 * @return The Java number.
 	 * @throws JsonElementCastException If the value is not a number.
 	 */
@@ -302,6 +313,7 @@ public abstract class JsonValue {
 
 	/**
 	 * Gets whether the JSON value is a boolean.
+	 *
 	 * @return <code>true</code> if this is a boolean.
 	 */
 	public boolean isBoolean() {
@@ -310,6 +322,7 @@ public abstract class JsonValue {
 
 	/**
 	 * Gets the JSON value as a boolean, otherwise throws.
+	 *
 	 * @return The JSON boolean.
 	 * @throws JsonElementCastException If the value is not a boolean.
 	 */
@@ -319,6 +332,7 @@ public abstract class JsonValue {
 
 	/**
 	 * Gets the JSON value as a boolean - nullable version.
+	 *
 	 * @return The JSON boolean.
 	 */
 	public final @Nullable JsonBoolean asBooleanOrNull() {
@@ -327,6 +341,7 @@ public abstract class JsonValue {
 
 	/**
 	 * Gets the JSON value as a boolean - optional version.
+	 *
 	 * @return An optional JSON boolean.
 	 */
 	public final @NotNull Optional<JsonBoolean> asBooleanOpt() {
@@ -335,6 +350,7 @@ public abstract class JsonValue {
 
 	/**
 	 * Gets the primitive value of the JSON boolean, otherwise throws.
+	 *
 	 * @return The primitive boolean.
 	 * @throws JsonElementCastException If the value is not a boolean.
 	 */
@@ -344,6 +360,7 @@ public abstract class JsonValue {
 
 	/**
 	 * Gets the nullable boxed value of the JSON boolean.
+	 *
 	 * @return The value, or <code>null</code>.
 	 */
 	public final @Nullable Boolean getBooleanValueOrNull() {
@@ -352,6 +369,7 @@ public abstract class JsonValue {
 
 	/**
 	 * Gets the boxed value of the JSON boolean - optional version.
+	 *
 	 * @return An optional value.
 	 */
 	public final @NotNull Optional<Boolean> getBooleanValueOpt() {
@@ -360,7 +378,9 @@ public abstract class JsonValue {
 
 	/**
 	 * Gets whether the JSON value is <code>false</code>.
-	 * @return <code>true</code> if this is a JSON boolean with <code>false</code> as its value.
+	 *
+	 * @return <code>true</code> if this is a JSON boolean with <code>false</code>
+	 *         as its value.
 	 */
 	public boolean isFalse() {
 		return false;
@@ -368,7 +388,9 @@ public abstract class JsonValue {
 
 	/**
 	 * Gets whether the JSON value is <code>true</code>.
-	 * @return <code>true</code> if this is a JSON boolean with <code>true</code> as its value.
+	 *
+	 * @return <code>true</code> if this is a JSON boolean with <code>true</code> as
+	 *         its value.
 	 */
 	public boolean isTrue() {
 		return false;
@@ -376,6 +398,7 @@ public abstract class JsonValue {
 
 	/**
 	 * Gets whether the JSON value is <code>null</code>.
+	 *
 	 * @return <code>true</code> if this is <code>null</code>.
 	 */
 	public boolean isNull() {
